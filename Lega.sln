@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.Core", "Lega.Core\Lega.Core.csproj", "{344BAD00-5D75-4048-8FC3-92241C58D722}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lega.Core", "Lega.Core\Lega.Core.csproj", "{344BAD00-5D75-4048-8FC3-92241C58D722}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.NUnit", "Lega.NUnit\Lega.NUnit.csproj", "{56ACCE40-522F-4F1A-8C63-8893DFD8069D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lega.NUnit", "Lega.NUnit\Lega.NUnit.csproj", "{56ACCE40-522F-4F1A-8C63-8893DFD8069D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lega.Test", "Lega.Test\Lega.Test.csproj", "{3F263513-9EC8-47C6-B4C9-4D23BEB4ED0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.Console", "Lega.Console\Lega.Console.csproj", "{6B1B4826-684F-4CF0-9BB1-6DF0A622F585}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lega.Console", "Lega.Console\Lega.Console.csproj", "{6B1B4826-684F-4CF0-9BB1-6DF0A622F585}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.Monogame.OpenGL.Perio", "Lega.Monogame.OpenGL.Perio\Lega.Monogame.OpenGL.Perio.csproj", "{AD6C6166-DC67-4E60-9240-94BBF5A5075A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.Core.Monogame", "Lega.Core.Monogame\Lega.Core.Monogame.csproj", "{C5104DD4-C59D-4590-BBBC-E946AC6B8952}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{6B1B4826-684F-4CF0-9BB1-6DF0A622F585}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B1B4826-684F-4CF0-9BB1-6DF0A622F585}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B1B4826-684F-4CF0-9BB1-6DF0A622F585}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD6C6166-DC67-4E60-9240-94BBF5A5075A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD6C6166-DC67-4E60-9240-94BBF5A5075A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD6C6166-DC67-4E60-9240-94BBF5A5075A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD6C6166-DC67-4E60-9240-94BBF5A5075A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5104DD4-C59D-4590-BBBC-E946AC6B8952}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5104DD4-C59D-4590-BBBC-E946AC6B8952}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5104DD4-C59D-4590-BBBC-E946AC6B8952}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5104DD4-C59D-4590-BBBC-E946AC6B8952}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

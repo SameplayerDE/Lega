@@ -69,7 +69,40 @@
         /// <returns>Span of the requested area</returns>
         public ReadOnlySpan<byte> Peek(int address, int length)
         {
+            return (ReadOnlySpan<byte>)_data.AsSpan().Slice(address, length);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public Memory<byte> PeekMemory(int address, int length)
+        {
+            return _data.AsMemory().Slice(address, length);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public Span<byte> PeekSpan(int address, int length)
+        {
             return _data.AsSpan().Slice(address, length);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public ReadOnlyMemory<byte> PeekReadOnlyMemory(int address, int length)
+        {
+            return (ReadOnlyMemory<byte>)_data.AsMemory().Slice(address, length);
         }
     }
 }
