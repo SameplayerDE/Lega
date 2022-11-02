@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Lega.Core.Monogame
 {
-    internal interface IUpdateable
-    {
+	internal interface IUpdateable
+	{
 
-        public void Update(GameTime gameTime);
+		public void Update(GameTime gameTime);
 
-    }
+	}
 }

@@ -135,9 +135,16 @@ void PresentSprite(int x, int y, int id)
     memory.Poke(128 + byteOffset + (5 * bytesPerLine), (byte)((byte)(sprRam[5] << bitOffset) | memory.Peek(128 + byteOffset + (5 * bytesPerLine))));
     memory.Poke(128 + byteOffset + (6 * bytesPerLine), (byte)((byte)(sprRam[6] << bitOffset) | memory.Peek(128 + byteOffset + (6 * bytesPerLine))));
     memory.Poke(128 + byteOffset + (7 * bytesPerLine), (byte)((byte)(sprRam[7] << bitOffset) | memory.Peek(128 + byteOffset + (7 * bytesPerLine))));
-    
-    if (bitOffset != 0)
+
+
+	if (bitOffset != 0)
     {
+        memory.Poke(128 + byteOffset + 1, (byte)((byte)(sprRam[0] >> 8 - bitOffset) | memory.Peek(128 + byteOffset + 1)));
+        memory.Poke(128 + byteOffset + 1, (byte)((byte)(sprRam[0] >> 8 - bitOffset) | memory.Peek(128 + byteOffset + 1)));
+        memory.Poke(128 + byteOffset + 1, (byte)((byte)(sprRam[0] >> 8 - bitOffset) | memory.Peek(128 + byteOffset + 1)));
+        memory.Poke(128 + byteOffset + 1, (byte)((byte)(sprRam[0] >> 8 - bitOffset) | memory.Peek(128 + byteOffset + 1)));
+        memory.Poke(128 + byteOffset + 1, (byte)((byte)(sprRam[0] >> 8 - bitOffset) | memory.Peek(128 + byteOffset + 1)));
+        memory.Poke(128 + byteOffset + 1, (byte)((byte)(sprRam[0] >> 8 - bitOffset) | memory.Peek(128 + byteOffset + 1)));
         memory.Poke(128 + byteOffset + 1, (byte)((byte)(sprRam[0] >> 8 - bitOffset) | memory.Peek(128 + byteOffset + 1)));
     }
 

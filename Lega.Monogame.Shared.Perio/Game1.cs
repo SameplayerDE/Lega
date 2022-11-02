@@ -10,224 +10,227 @@ using System.Threading.Tasks;
 
 namespace Lega.Monogame.Shared.Perio
 {
-    public class Game1 : Game
-    {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+	public class Game1 : Game
+	{
 
-        private PerioDisplay _display;
-        private VirtualMemory _memory;
-        private VirtualKeyboard _keyboard;
-
-        private Texture2D _displayOutput;
-        private RenderTarget2D _target;
-        private int _displayOutputScale = 2;
-
-        private SpriteFont _font;
-
-        private Stopwatch _clock;
-        private Stopwatch _debugUpdate;
-        private Stopwatch _debugDraw;
-
-        private TimeSpan _lastDebugUpdate;
-        private TimeSpan _lastDebugDraw;
-
-        private bool _clockCycle = false;
-        private bool _back = false;
-
-        public bool IsFullScreen
-        {
-            get => _graphics.IsFullScreen;
-            set
-            {
-                _graphics.IsFullScreen = value;
-                _graphics.ApplyChanges();
-            }
-        }
+		private SpriteBatch _spriteBatch;
+		private GraphicsDeviceManager _graphics;
+		public bool IsFullScreen
+		{
+			get => _graphics.IsFullScreen;
+			set
+			{
+				_graphics.IsFullScreen = value;
+				_graphics.ApplyChanges();
+			}
+		}
 
 
-        private Rectangle _destination;
+		private PerioDisplay _display;
+		private VirtualMemory _memory;
+		private VirtualKeyboard _keyboard;
 
-        private Random _random = new Random();
+		private SpriteFont _font;
 
-        public Game1()
-        {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-        }
+		private Texture2D _displayOutput;
+		private RenderTarget2D _target;
 
-        protected override void Initialize()
-        {
+		private Rectangle _destination;
 
-            _graphics.PreferredBackBufferWidth = 256 * 4;
-            _graphics.PreferredBackBufferHeight = 192 * 4;
-            _graphics.PreferredBackBufferFormat = SurfaceFormat.Color;
-            _graphics.PreferredDepthStencilFormat = DepthFormat.Depth24; // <-- set depth here
-
-            _graphics.HardwareModeSwitch = false;
-            _graphics.PreferMultiSampling = false;
-            _graphics.IsFullScreen = false;
-            _graphics.SynchronizeWithVerticalRetrace = false;
-            _graphics.ApplyChanges();
-
-            TargetElapsedTime = TimeSpan.FromSeconds(1 / 30f);
-            IsFixedTimeStep = true;
+		private Random _random = new Random();
 
 
-            _memory = new VirtualMemory(16_384);
-            _keyboard = new VirtualKeyboard();
-            _display = new PerioDisplay(128, 128);
+		private Stopwatch _debugUpdate;
+		private Stopwatch _debugDraw;
+		public Game1()
+		{
+			_graphics = new GraphicsDeviceManager(this);
+			Content.RootDirectory = "Content";
+		}
 
-            try
-            {
-                //_keyboard.Map(_memory, 0, 16);
-                _display.Map(_memory, 0, _display.BytesPerFrame);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+		protected override void Initialize()
+		{
+			_graphics.PreferredBackBufferWidth = 680;
+			_graphics.PreferredBackBufferHeight = 420;
+			_graphics.PreferredBackBufferFormat = SurfaceFormat.Color;
+			_graphics.PreferredDepthStencilFormat = DepthFormat.Depth24; // <-- set depth here
 
-            _clock = new Stopwatch();
-            _debugUpdate = new Stopwatch();
-            _debugDraw = new Stopwatch();
+			_graphics.HardwareModeSwitch = false;
+			_graphics.PreferMultiSampling = false;
+			_graphics.IsFullScreen = false;
+			_graphics.ApplyChanges();
 
-            _display.MemoryRegion.Poke(0, _display.BytesPerFrame, 0x00);
-            _display.MemoryRegion.Poke(0, 0x1F);
+			Window.AllowUserResizing = true;
+			Window.ClientSizeChanged += OnResize;
+			IsFixedTimeStep = true;
+			MaxElapsedTime = TimeSpan.FromSeconds(1);
+			TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
 
-            Window.AllowUserResizing = true;
-            Window.ClientSizeChanged += OnResize;
+			_memory = new VirtualMemory(16_384);
+			_keyboard = new VirtualKeyboard();
+			_display = new PerioDisplay(128, 128);
 
-            PerformScreenFit(_display.Width, _display.Height);
+			try
+			{
+				_keyboard.Map(_memory, 0, 16);
+				_display.Map(_memory, 64, _display.BytesPerFrame);
+				_memory.Poke(64, 0x55);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+			}
 
-            base.Initialize();
-        }
+			_display.MemoryRegion.Poke(0, _display.BytesPerFrame, 0x00);
+			_display.MemoryRegion.Poke(0, 0x1F);
 
-        private void OnResize(object sender, EventArgs e)
-        {
-            PerformScreenFit(_display.Width, _display.Height);
-        }
+			_display.SetPixel(0, 1, 5);
+			_display.SetPixel(1, 0, 5);
+			_display.SetPixel(2, 1, 5);
 
-        protected override void LoadContent()
-        {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _font = Content.Load<SpriteFont>("Default");
-            _displayOutput = new Texture2D(GraphicsDevice, _display.Width, _display.Height);
-            _target = new RenderTarget2D(GraphicsDevice, _display.Width, _display.Height);
-        }
+			_debugDraw = new Stopwatch();
+			_debugUpdate = new Stopwatch();
 
-        protected override void Update(GameTime gameTime)
-        {
-            _lastDebugUpdate = _debugUpdate.Elapsed;
-            _debugUpdate.Reset();
-            _debugUpdate.Start();
-            SystemKeyboard.Update(gameTime);
-            if (SystemKeyboard.IsKeyDown(Keys.LeftAlt))
-            {
-                if (SystemKeyboard.IsKeyDownOnce(Keys.Enter))
-                {
-                    IsFullScreen = !IsFullScreen;
-                }
-            }
+			base.Initialize();
+			PerformScreenFit(_display.Width, _display.Height);
+		}
 
-            if (!_clock.IsRunning)
-            {
-                _clock.Start();
-            }
+		private void OnResize(object sender, EventArgs e)
+		{
+			PerformScreenFit(_display.Width, _display.Height);
+		}
 
+		protected override void LoadContent()
+		{
+			_spriteBatch = new SpriteBatch(GraphicsDevice);
+			_font = Content.Load<SpriteFont>("Default");
+			_displayOutput = new Texture2D(GraphicsDevice, _display.Width, _display.Height);
+			_target = new RenderTarget2D(GraphicsDevice, _display.Width, _display.Height);
+			base.LoadContent();
+		}
 
-            _clockCycle = false;
-            //if (_clock.Elapsed.TotalMilliseconds >= 1000f / 60)
-           // {
-                
-                //_keyboard.Update(gameTime);
-                var index = _random.Next(0, _display.MemoryLength);
-                _display.MemoryRegion.Poke(index, (byte)_random.Next(0, 16));
-                if (SystemKeyboard.IsKeyDown(Keys.Space))
-                {
-                    new Task(() =>
-                    {
-                        _displayOutput.SetData(Util.FromBufferPerio(_display.MemoryRegion.Data));
-                    }).Start();
-                }
-                //_clockCycle = true;
-                //_target.SetData(Util.FromBufferPerio(_display.MemoryRegion.Data.ToArray()));
-              //  _clock.Restart();
-            //}
-            base.Update(gameTime);
-            _debugUpdate.Stop();
-            //Window.Title = $"{_debugUpdate.Elapsed.TotalMilliseconds}ms | {_debugDraw.Elapsed.TotalMilliseconds}ms";
-        }
+		protected override void Update(GameTime gameTime)
+		{
+			_debugUpdate.Restart();
+			SystemKeyboard.Update(gameTime);
+			if (SystemKeyboard.IsKeyDown(Keys.LeftAlt))
+			{
+				if (SystemKeyboard.IsKeyDownOnce(Keys.Enter))
+				{
+					IsFullScreen = !IsFullScreen;
+				}
+			}
 
-        protected override void Draw(GameTime gameTime)
-        {
-            _lastDebugDraw = _debugDraw.Elapsed;
-            _debugDraw.Reset();
-            _debugDraw.Start();
-            GraphicsDevice.SetRenderTarget(_target);
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(_displayOutput, Vector2.Zero, Color.White);
-            _spriteBatch.End();
-            GraphicsDevice.SetRenderTarget(null);
+			if (SystemKeyboard.IsKeyDownOnce(Keys.Space))
+			{
+				if (_display.MemoryRegion.Offset == 64)
+				{
+					_display.Map(_memory, 1028, _display.BytesPerFrame);
+				}
+				else
+				{
+					_display.Map(_memory, 64, _display.BytesPerFrame);
+				}
+			}
 
-            GraphicsDevice.Clear(VirtualSystem.Colors[15]);
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            _spriteBatch.Draw(_target, _destination, Color.White);
-            _spriteBatch.DrawString(_font, $"{_lastDebugUpdate.TotalMilliseconds}ms | {_lastDebugDraw.TotalMilliseconds}ms", Vector2.Zero, Color.White);
-            _spriteBatch.End();
+			new Task(() =>
+			{
+				for (var i = 0; i < _display.Width; i++)
+				{
+					//Thread.Sleep(10);
+					_display.SetPixel(_random.Next(0, _display.Width), _random.Next(0, _display.Height), (byte)_random.Next(0, 16));
+					//_memory.Poke(_random.Next(64, _display.MemoryLength), (byte)_random.Next(0, 255));
+				}
+				_displayOutput.SetData(Util.FromBufferPerio(_display.MemoryRegion.Data));
+			}).Start();
+			base.Update(gameTime);
+			_debugUpdate.Stop();
+			Window.Title = $"{_debugUpdate.Elapsed.TotalMilliseconds}";
+		}
 
-            /*GraphicsDevice.Clear(Color.Black);
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            var x = _displayOutput0.Width * _displayOutputScale;
-            var y = 0;
-            var perRow = 32;
-            for (int i = 1; i <= _memory.Capacity; i++)
-            {
-                _spriteBatch.DrawString(_font, $"{_memory.Peek(i - 1):X2}", new Vector2(x, y), _clockCycle ? Color.Red : Color.White);
-                if (i % perRow == 0)
-                {
-                    x = _displayOutput0.Width * _displayOutputScale;
-                    y += _font.LineSpacing;
-                }
-                else
-                {
-                    x += _font.LineSpacing * 3;
-                }
-                
-            }
-            _spriteBatch.Draw(_target, new Rectangle(0, 0, _target.Width * _displayOutputScale, _target.Height * _displayOutputScale), Color.White);
+		protected override void Draw(GameTime gameTime)
+		{
+			GraphicsDevice.SetRenderTarget(_target);
+			_spriteBatch.Begin();
+			_spriteBatch.Draw(_displayOutput, Vector2.Zero, Color.White);
+			_spriteBatch.End();
+			GraphicsDevice.SetRenderTarget(null);
 
-            _spriteBatch.End();*/
+			GraphicsDevice.Clear(VirtualSystem.Colors[15]);
+			_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+			_spriteBatch.Draw(_target, _destination, Color.White);
+			var x = 0;
+			var y = 0;
+			var perRow = 16;
+			for (int i = 1; i <= _memory.Capacity; i++)
+			{
+				_spriteBatch.DrawString(_font, $"{_memory.Peek(i - 1):X2}", new Vector2(x, y), Color.White);
+				if (i % perRow == 0)
+				{
+					x = 0;
+					y += _font.LineSpacing;
+				}
+				else
+				{
+					x += _font.LineSpacing * 3;
+				}
 
-            base.Draw(gameTime);
-            _debugDraw.Stop();
-        }
+			}
+			_spriteBatch.End();
 
-        private void PerformScreenFit(int scrW, int scrH)
-        {
-            var (_, _, width, height) = GraphicsDevice.Viewport.Bounds;
-            var aspectRatioViewport = GraphicsDevice.Viewport.AspectRatio;
-            var aspectRatioVirtualDisplay = (float)scrW / scrH;
+			/*GraphicsDevice.Clear(Color.Black);
+			_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+			var x = _displayOutput0.Width * _displayOutputScale;
+			var y = 0;
+			var perRow = 32;
+			for (int i = 1; i <= _memory.Capacity; i++)
+			{
+				_spriteBatch.DrawString(_font, $"{_memory.Peek(i - 1):X2}", new Vector2(x, y), _clockCycle ? Color.Red : Color.White);
+				if (i % perRow == 0)
+				{
+					x = _displayOutput0.Width * _displayOutputScale;
+					y += _font.LineSpacing;
+				}
+				else
+				{
+					x += _font.LineSpacing * 3;
+				}
+				
+			}
+			_spriteBatch.Draw(_target, new Rectangle(0, 0, _target.Width * _displayOutputScale, _target.Height * _displayOutputScale), Color.White);
 
-            var rx = 0f;
-            var ry = 0f;
-            float rw = width;
-            float rh = height;
+			_spriteBatch.End();*/
 
-            if (aspectRatioViewport > aspectRatioVirtualDisplay)
-            {
-                rw = rh * aspectRatioVirtualDisplay;
-                rx = (width - rw) / 2f;
-            }
-            else if (aspectRatioViewport < aspectRatioVirtualDisplay)
-            {
-                rh = rw / aspectRatioVirtualDisplay;
-                ry = (height - rh) / 2f;
-            }
+			base.Draw(gameTime);
+		}
 
-            _destination = new Rectangle((int)rx, (int)ry, (int)rw, (int)rh);
-        }
+		private void PerformScreenFit(int scrW, int scrH)
+		{
+			var (_, _, width, height) = GraphicsDevice.Viewport.Bounds;
+			var aspectRatioViewport = GraphicsDevice.Viewport.AspectRatio;
+			var aspectRatioVirtualDisplay = (float)scrW / scrH;
 
-    }
+			var rx = 0f;
+			var ry = 0f;
+			float rw = width;
+			float rh = height;
+
+			if (aspectRatioViewport > aspectRatioVirtualDisplay)
+			{
+				rw = rh * aspectRatioVirtualDisplay;
+				rx = (width - rw) / 2f;
+			}
+			else if (aspectRatioViewport < aspectRatioVirtualDisplay)
+			{
+				rh = rw / aspectRatioVirtualDisplay;
+				ry = (height - rh) / 2f;
+#if __MOBILE__
+				ry = 0;
+#endif
+			}
+
+			_destination = new Rectangle((int)rx, (int)ry, (int)rw, (int)rh);
+		}
+
+	}
 }
