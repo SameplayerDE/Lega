@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 
-namespace Lega.Monogame.DirextX.Perio.Core;
+namespace Lega.Monogame.Shared.Perio.Core;
 
 public static class Util
 {

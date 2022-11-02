@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Lega.Monogame.DirextX.Perio.Core
+namespace Lega.Monogame.Shared.Perio.Core
 {
     public static class VirtualSystem
     {

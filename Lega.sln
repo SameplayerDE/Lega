@@ -17,6 +17,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lega.Core.Monogame", "Lega.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.Monogame.DirectX.Perio", "Lega.Monogame.DirectX.Perio\Lega.Monogame.DirectX.Perio.csproj", "{80B7F3CD-693F-40D1-B73A-6771C310668C}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Lega.Monogame.Shared.Perio", "Lega.Monogame.Shared.Perio\Lega.Monogame.Shared.Perio.shproj", "{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Monogame", "Monogame", "{7CFBA1C6-2259-4C69-9DA2-387B71CF0572}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B1C3CF4A-39E3-4828-99E4-20684B5CF949}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,7 +61,19 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{344BAD00-5D75-4048-8FC3-92241C58D722} = {B1C3CF4A-39E3-4828-99E4-20684B5CF949}
+		{AD6C6166-DC67-4E60-9240-94BBF5A5075A} = {7CFBA1C6-2259-4C69-9DA2-387B71CF0572}
+		{C5104DD4-C59D-4590-BBBC-E946AC6B8952} = {B1C3CF4A-39E3-4828-99E4-20684B5CF949}
+		{80B7F3CD-693F-40D1-B73A-6771C310668C} = {7CFBA1C6-2259-4C69-9DA2-387B71CF0572}
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383} = {7CFBA1C6-2259-4C69-9DA2-387B71CF0572}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB2276D0-4F87-47B6-B31C-87327957A92A}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Lega.Monogame.Shared.Perio\Lega.Monogame.Shared.Perio.projitems*{80b7f3cd-693f-40d1-b73a-6771c310668c}*SharedItemsImports = 5
+		Lega.Monogame.Shared.Perio\Lega.Monogame.Shared.Perio.projitems*{a0cdbd0e-3a41-42b7-9425-a838bc2c7383}*SharedItemsImports = 13
+		Lega.Monogame.Shared.Perio\Lega.Monogame.Shared.Perio.projitems*{ad6c6166-dc67-4e60-9240-94bbf5a5075a}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lega.Monogame.OpenGL.Perio.Core
+namespace Lega.Monogame.Shared.Perio.Core
 {
     internal class PerioDisplay : VirtualComponent
     {

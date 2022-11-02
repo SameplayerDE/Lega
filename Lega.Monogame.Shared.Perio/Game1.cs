@@ -1,14 +1,14 @@
 ﻿using Lega.Core.Memory;
 using Lega.Core.Monogame.Graphics;
 using Lega.Core.Monogame.Input;
-using Lega.Monogame.DirextX.Perio.Core;
+using Lega.Monogame.Shared.Perio.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
 
-namespace Lega.Monogame.DirextX.Perio
+namespace Lega.Monogame.Shared.Perio
 {
     public class Game1 : Game
     {
@@ -20,7 +20,7 @@ namespace Lega.Monogame.DirextX.Perio
         private VirtualKeyboard _keyboard;
 
         private Texture2D _displayOutput;
-        private int _displayOutputScale = 4;
+        private int _displayOutputScale = 2;
 
         private SpriteFont _font;
 
