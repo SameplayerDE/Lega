@@ -8,14 +8,8 @@ namespace Lega.Core.Memory
 {
     public interface IVirtualComponent
     {
-        public VirtualMemory Memory
-        {
-            get;
-        }
-
-        public ReadOnlyMemory<byte> MappedMemory
-        {
-            get;
+        public VirtualMemoryRegion MemoryRegion { 
+            get; 
         }
 
         public int MemoryOffset
@@ -28,7 +22,7 @@ namespace Lega.Core.Memory
             get;
         }
 
-        public void Map(VirtualMemory memory, int offset, int length);
+        public void Map(VirtualMemory memory, int offset, int bytes);
 
     }
 }

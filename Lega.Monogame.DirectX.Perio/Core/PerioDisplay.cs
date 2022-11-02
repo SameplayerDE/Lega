@@ -1,28 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Input;
+﻿using Lega.Core.Memory;
 using System;
-using Lega.Core.Memory;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Lega.Core.Monogame.Graphics
+namespace Lega.Monogame.DirextX.Perio.Core
 {
-    public class VirtualDisplay : VirtualComponent
+    internal class PerioDisplay : VirtualComponent
     {
         private int _width;
         private int _height;
-        private int _bytesPerPixel;
         private int _pixelCount;
 
         public int Width => _width;
         public int Height => _height;
-        public int BytesPerPixel => _bytesPerPixel;
         public int PixelCount => _pixelCount;
-        public int BytesPerFrame => _pixelCount * _bytesPerPixel;
-        public VirtualDisplay(int width, int height, int bytes = 1)
+        public int BytesPerFrame => _pixelCount / 2;
+        public PerioDisplay(int width, int height)
         {
             _width = width;
             _height = height;
-            _bytesPerPixel = bytes;
             _pixelCount = width * height;
         }
 
@@ -30,7 +28,7 @@ namespace Lega.Core.Monogame.Graphics
         {
             if (bytes < BytesPerFrame)
             {
-                throw new ArgumentOutOfRangeException($"not enough bytes to store display data. Display is using {_bytesPerPixel} bytes per pixel and has {_pixelCount}. Total of {BytesPerFrame} bytes has to be mapped.");
+                throw new ArgumentException($"not enough bytes to store display data. Total of {BytesPerFrame} bytes has to be mapped.");
             }
             if (memory.Capacity < BytesPerFrame)
             {
@@ -38,5 +36,6 @@ namespace Lega.Core.Monogame.Graphics
             }
             base.Map(memory, offset, bytes);
         }
+
     }
 }

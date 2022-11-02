@@ -7,6 +7,7 @@ namespace Lega.NUnit
 
         VirtualMemory memory;
 
+
         [SetUp]
         public void Setup()
         {
@@ -16,7 +17,8 @@ namespace Lega.NUnit
         [Test]
         public void Test1()
         {
-            Assert.Pass();
+            memory.Poke(0x0F, 0x01);
+            Assert.Equals(memory.Peek(0x0F), 0x01);
         }
     }
 }

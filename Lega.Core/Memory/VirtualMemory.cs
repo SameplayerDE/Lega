@@ -21,6 +21,11 @@
         public int Capacity => _capacity;
 
         /// <summary>
+        /// span of data
+        /// </summary>
+        public ReadOnlySpan<byte> Data => Peek(0x00, Capacity);
+
+        /// <summary>
         /// allocates the space used by the memory
         /// </summary>
         /// <param name="capacity">number of bytes saved into memory</param>

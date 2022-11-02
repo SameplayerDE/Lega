@@ -1,14 +1,14 @@
 ﻿using Lega.Core.Memory;
 using Lega.Core.Monogame.Graphics;
 using Lega.Core.Monogame.Input;
-using Lega.Monogame.OpenGL.Perio.Core;
+using Lega.Monogame.DirextX.Perio.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
 
-namespace Lega.Monogame.OpenGL.Perio
+namespace Lega.Monogame.DirextX.Perio
 {
     public class Game1 : Game
     {

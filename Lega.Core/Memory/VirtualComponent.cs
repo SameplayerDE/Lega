@@ -8,22 +8,19 @@ namespace Lega.Core.Memory
 {
     public abstract class VirtualComponent : IVirtualComponent
     {
-        private VirtualMemory _memory;
-        public VirtualMemory Memory => _memory;
+        private VirtualMemoryRegion _memoryRegion;
+        public VirtualMemoryRegion MemoryRegion => _memoryRegion;
 
-        public ReadOnlyMemory<byte> MappedMemory => _memory.PeekReadOnlyMemory(_offset, _length);
+        public int MemoryOffset => _memoryRegion.Offset;
+        public int MemoryLength => _memoryRegion.Bytes;
 
-        private int _offset = 0;
-        public int MemoryOffset => _offset;
-
-        private int _length = 1;
-        public int MemoryLength => _length;
-
-        public void Map(VirtualMemory memory, int offset, int length)
+        public virtual void Map(VirtualMemory memory, int offset, int bytes)
         {
-            _memory = memory;
-            _offset = offset;
-            _length = length;
+            if (offset + bytes > memory.Capacity)
+            {
+                throw new ArgumentOutOfRangeException("mapped outside of virtual memory bounds");
+            }
+            _memoryRegion = new VirtualMemoryRegion(memory, offset, bytes);
         }
     }
 }

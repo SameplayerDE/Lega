@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lega.Test", "Lega.Test\Lega
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lega.Console", "Lega.Console\Lega.Console.csproj", "{6B1B4826-684F-4CF0-9BB1-6DF0A622F585}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.Monogame.OpenGL.Perio", "Lega.Monogame.OpenGL.Perio\Lega.Monogame.OpenGL.Perio.csproj", "{AD6C6166-DC67-4E60-9240-94BBF5A5075A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lega.Monogame.OpenGL.Perio", "Lega.Monogame.OpenGL.Perio\Lega.Monogame.OpenGL.Perio.csproj", "{AD6C6166-DC67-4E60-9240-94BBF5A5075A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.Core.Monogame", "Lega.Core.Monogame\Lega.Core.Monogame.csproj", "{C5104DD4-C59D-4590-BBBC-E946AC6B8952}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lega.Core.Monogame", "Lega.Core.Monogame\Lega.Core.Monogame.csproj", "{C5104DD4-C59D-4590-BBBC-E946AC6B8952}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.Monogame.DirectX.Perio", "Lega.Monogame.DirectX.Perio\Lega.Monogame.DirectX.Perio.csproj", "{80B7F3CD-693F-40D1-B73A-6771C310668C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{C5104DD4-C59D-4590-BBBC-E946AC6B8952}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5104DD4-C59D-4590-BBBC-E946AC6B8952}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5104DD4-C59D-4590-BBBC-E946AC6B8952}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80B7F3CD-693F-40D1-B73A-6771C310668C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80B7F3CD-693F-40D1-B73A-6771C310668C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80B7F3CD-693F-40D1-B73A-6771C310668C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80B7F3CD-693F-40D1-B73A-6771C310668C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
