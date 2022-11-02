@@ -1,6 +1,4 @@
-﻿using Calendula.Framework.Input;
-using Lega.Core.Memory;
-using Lega.Core.Monogame.Graphics;
+﻿using Lega.Core.Memory;
 using Lega.Core.Monogame.Input;
 using Lega.Monogame.Shared.Perio.Core;
 using Microsoft.Xna.Framework;
@@ -30,6 +28,10 @@ namespace Lega.Monogame.Shared.Perio
         private Stopwatch _clock;
         private Stopwatch _debugUpdate;
         private Stopwatch _debugDraw;
+
+        private TimeSpan _lastDebugUpdate;
+        private TimeSpan _lastDebugDraw;
+
         private bool _clockCycle = false;
         private bool _back = false;
 
@@ -117,10 +119,13 @@ namespace Lega.Monogame.Shared.Perio
 
         protected override void Update(GameTime gameTime)
         {
-            HxKeyboard.Update(gameTime);
-            if (HxKeyboard.IsKeyDown(Keys.LeftAlt))
+            _lastDebugUpdate = _debugUpdate.Elapsed;
+            _debugUpdate.Reset();
+            _debugUpdate.Start();
+            SystemKeyboard.Update(gameTime);
+            if (SystemKeyboard.IsKeyDown(Keys.LeftAlt))
             {
-                if (HxKeyboard.IsKeyDownOnce(Keys.Enter))
+                if (SystemKeyboard.IsKeyDownOnce(Keys.Enter))
                 {
                     IsFullScreen = !IsFullScreen;
                 }
@@ -133,29 +138,31 @@ namespace Lega.Monogame.Shared.Perio
 
 
             _clockCycle = false;
-            if (_clock.Elapsed.TotalMilliseconds >= 1000f / 30)
-            {
-                _debugUpdate.Reset();
-                _debugUpdate.Start();
+            //if (_clock.Elapsed.TotalMilliseconds >= 1000f / 60)
+           // {
+                
                 //_keyboard.Update(gameTime);
                 var index = _random.Next(0, _display.MemoryLength);
                 _display.MemoryRegion.Poke(index, (byte)_random.Next(0, 16));
-
-                new Task(() =>
+                if (SystemKeyboard.IsKeyDown(Keys.Space))
                 {
-                    _displayOutput.SetData(Util.FromBufferPerio(_display.MemoryRegion.Data.ToArray()));
-                }).Start();
-
-                _debugUpdate.Stop();
+                    new Task(() =>
+                    {
+                        _displayOutput.SetData(Util.FromBufferPerio(_display.MemoryRegion.Data));
+                    }).Start();
+                }
                 //_clockCycle = true;
-                _clock.Restart();
-            }
-            Window.Title = $"{_debugUpdate.Elapsed.TotalMilliseconds}ms | {_debugDraw.Elapsed.TotalMilliseconds}ms";
+                //_target.SetData(Util.FromBufferPerio(_display.MemoryRegion.Data.ToArray()));
+              //  _clock.Restart();
+            //}
             base.Update(gameTime);
+            _debugUpdate.Stop();
+            //Window.Title = $"{_debugUpdate.Elapsed.TotalMilliseconds}ms | {_debugDraw.Elapsed.TotalMilliseconds}ms";
         }
 
         protected override void Draw(GameTime gameTime)
         {
+            _lastDebugDraw = _debugDraw.Elapsed;
             _debugDraw.Reset();
             _debugDraw.Start();
             GraphicsDevice.SetRenderTarget(_target);
@@ -164,9 +171,10 @@ namespace Lega.Monogame.Shared.Perio
             _spriteBatch.End();
             GraphicsDevice.SetRenderTarget(null);
 
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(VirtualSystem.Colors[15]);
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             _spriteBatch.Draw(_target, _destination, Color.White);
+            _spriteBatch.DrawString(_font, $"{_lastDebugUpdate.TotalMilliseconds}ms | {_lastDebugDraw.TotalMilliseconds}ms", Vector2.Zero, Color.White);
             _spriteBatch.End();
 
             /*GraphicsDevice.Clear(Color.Black);

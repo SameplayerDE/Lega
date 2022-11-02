@@ -9,8 +9,8 @@ namespace Lega.Monogame.Shared.Perio.Core
 
         public static Color[] Colors { get; } =
         {
-            //Util.FromHex("16171a"),
-            Color.Transparent,
+            Util.FromHex("16171a"),
+            //Color.Transparent,
             Util.FromHex("7f0622"),
             Util.FromHex("d62411"),
             Util.FromHex("ff8426"),

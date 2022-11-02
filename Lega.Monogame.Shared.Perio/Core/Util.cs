@@ -42,7 +42,7 @@ public static class Util
         return result;
     }
 
-    public static Color[] FromBufferPerio(byte[] data)
+    public static Color[] FromBufferPerio(ReadOnlySpan<byte> data)
     {
         var result = new Color[data.Length * 2];
         for (var i = 0; i < result.Length; i += 2)
