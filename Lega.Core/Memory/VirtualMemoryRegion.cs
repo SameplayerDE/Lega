@@ -28,14 +28,27 @@ namespace Lega.Core.Memory
 		/// </summary>
 		public ReadOnlySpan<byte> Data => _memory.Peek(Offset, Bytes);
 
-		public VirtualMemoryRegion(VirtualMemory memory, int offset, int bytes)
+        public VirtualMemoryRegion() {}
+
+        public VirtualMemoryRegion(VirtualMemory memory, int offset, int bytes)
 		{
 			_memory = memory;
 			_offset = offset;
 			_bytes = bytes;
 		}
 
-		public void Poke(int address, byte value)
+        public virtual void Map(VirtualMemory memory, int offset, int bytes)
+        {
+            if (offset + bytes > memory.Capacity)
+            {
+                throw new ArgumentOutOfRangeException("mapped outside of virtual memory bounds");
+            }
+            _memory = memory;
+            _offset = offset;
+            _bytes = bytes;
+        }
+
+        public void Poke(int address, byte value)
 		{
 			_memory.Poke(address + _offset, value);
 		}
@@ -45,9 +58,24 @@ namespace Lega.Core.Memory
 			_memory.Poke(address + _offset, length, value);
 		}
 
-		public byte Peek(int address)
+        public void Poke(int adress, params byte[] data)
+        {
+            int offset = 0;
+            while (offset < data.Length)
+            {
+                Poke(adress + offset, data[offset]);
+                offset++;
+            }
+        }
+
+        public byte Peek(int address)
 		{
 			return _memory.Peek(address + _offset);
 		}
-	}
+
+        public ReadOnlySpan<byte> Peek(int address, int bytes)
+        {
+            return _memory.Peek(address + _offset, bytes);
+        }
+    }
 }

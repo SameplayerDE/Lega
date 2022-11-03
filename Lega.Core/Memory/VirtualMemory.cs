@@ -57,6 +57,21 @@
 		}
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="adress"></param>
+		/// <param name="data"></param>
+		public void Poke(int adress, params byte[] data)
+		{
+			int offset = 0;
+			while (offset < data.Length)
+			{
+				Poke(adress + offset, data[offset]);
+				offset++;
+			}
+		}
+
+		/// <summary>
 		/// reads value in memory
 		/// </summary>
 		/// <param name="address">start address in memory</param>

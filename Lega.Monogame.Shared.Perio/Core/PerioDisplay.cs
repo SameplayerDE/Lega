@@ -3,7 +3,7 @@ using System;
 
 namespace Lega.Monogame.Shared.Perio.Core
 {
-	internal class PerioDisplay : VirtualComponent
+	public class PerioDisplay : VirtualComponent
 	{
 		private int _width;
 		private int _height;
@@ -20,14 +20,18 @@ namespace Lega.Monogame.Shared.Perio.Core
 			_pixelCount = width * height;
 		}
 
-		public void SetPixel(int x, int y, byte id)
+		public void SetPixel(int x, int y, int id)
 		{
+			if (x < 0 || y < 0 || x >= _width || y >= _height)
+			{
+				return;
+			}
 			//maps x and y to the address
 			var index = y * (_width / 2) + (x / 2);
 			//0 if it is a most sig byte 1 if it is least sig byte
 			var region = x % 2;
 			//color id
-			var color = id % 16;
+			var color = (byte)(id % 16);
 			//what is currently saved at this address
 			var takenBy = MemoryRegion.Peek(index);
 			//first nibble
@@ -35,13 +39,16 @@ namespace Lega.Monogame.Shared.Perio.Core
 			//last nibble
 			var takenLast = takenBy & 0x0F;
 
-			if (region == 0)
+			if (color != 0)
 			{
-				takenFirst = color;
-			}
-			else
-			{
-				takenLast = color;
+				if (region == 0)
+				{
+					takenFirst = color;
+				}
+				else
+				{
+					takenLast = color;
+				}
 			}
 
 			takenFirst <<= 4;
@@ -69,5 +76,11 @@ namespace Lega.Monogame.Shared.Perio.Core
 			base.Map(memory, offset, bytes);
 		}
 
+		internal void Clear(byte data)
+		{
+			//fill
+			//data %= 16;
+			MemoryRegion.Poke(0, MemoryRegion.Bytes, 0x00);
+		}
 	}
 }

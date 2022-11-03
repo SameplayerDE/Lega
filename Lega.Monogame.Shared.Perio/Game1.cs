@@ -25,11 +25,6 @@ namespace Lega.Monogame.Shared.Perio
 			}
 		}
 
-
-		private PerioDisplay _display;
-		private VirtualMemory _memory;
-		private VirtualKeyboard _keyboard;
-
 		private SpriteFont _font;
 
 		private Texture2D _displayOutput;
@@ -39,6 +34,8 @@ namespace Lega.Monogame.Shared.Perio
 
 		private Random _random = new Random();
 
+		private Vector2 _vel = Vector2.Zero;
+		private Vector2 _pos = Vector2.Zero;
 
 		private Stopwatch _debugUpdate;
 		private Stopwatch _debugDraw;
@@ -46,12 +43,13 @@ namespace Lega.Monogame.Shared.Perio
 		{
 			_graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
+			IsMouseVisible = true;
 		}
 
 		protected override void Initialize()
 		{
-			_graphics.PreferredBackBufferWidth = 680;
-			_graphics.PreferredBackBufferHeight = 420;
+			_graphics.PreferredBackBufferWidth = 720;
+			_graphics.PreferredBackBufferHeight = 480;
 			_graphics.PreferredBackBufferFormat = SurfaceFormat.Color;
 			_graphics.PreferredDepthStencilFormat = DepthFormat.Depth24; // <-- set depth here
 
@@ -64,48 +62,26 @@ namespace Lega.Monogame.Shared.Perio
 			Window.ClientSizeChanged += OnResize;
 			IsFixedTimeStep = true;
 			MaxElapsedTime = TimeSpan.FromSeconds(1);
-			TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
-
-			_memory = new VirtualMemory(16_384);
-			_keyboard = new VirtualKeyboard();
-			_display = new PerioDisplay(128, 128);
-
-			try
-			{
-				_keyboard.Map(_memory, 0, 16);
-				_display.Map(_memory, 64, _display.BytesPerFrame);
-				_memory.Poke(64, 0x55);
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e.Message);
-			}
-
-			_display.MemoryRegion.Poke(0, _display.BytesPerFrame, 0x00);
-			_display.MemoryRegion.Poke(0, 0x1F);
-
-			_display.SetPixel(0, 1, 5);
-			_display.SetPixel(1, 0, 5);
-			_display.SetPixel(2, 1, 5);
+			TargetElapsedTime = TimeSpan.FromSeconds(1d / 30d);
 
 			_debugDraw = new Stopwatch();
 			_debugUpdate = new Stopwatch();
 
 			base.Initialize();
-			PerformScreenFit(_display.Width, _display.Height);
+			PerformScreenFit(VirtualSystem.Display.Width, VirtualSystem.Display.Height);
 		}
 
 		private void OnResize(object sender, EventArgs e)
 		{
-			PerformScreenFit(_display.Width, _display.Height);
+			PerformScreenFit(VirtualSystem.Display.Width, VirtualSystem.Display.Height);
 		}
 
 		protected override void LoadContent()
 		{
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 			_font = Content.Load<SpriteFont>("Default");
-			_displayOutput = new Texture2D(GraphicsDevice, _display.Width, _display.Height);
-			_target = new RenderTarget2D(GraphicsDevice, _display.Width, _display.Height);
+			_displayOutput = new Texture2D(GraphicsDevice, VirtualSystem.Display.Width, VirtualSystem.Display.Height);
+			_target = new RenderTarget2D(GraphicsDevice, VirtualSystem.Display.Width, VirtualSystem.Display.Height);
 			base.LoadContent();
 		}
 
@@ -120,29 +96,47 @@ namespace Lega.Monogame.Shared.Perio
 					IsFullScreen = !IsFullScreen;
 				}
 			}
-
-			if (SystemKeyboard.IsKeyDownOnce(Keys.Space))
+			if (SystemKeyboard.IsKeyDown(Keys.Right))
 			{
-				if (_display.MemoryRegion.Offset == 64)
-				{
-					_display.Map(_memory, 1028, _display.BytesPerFrame);
-				}
-				else
-				{
-					_display.Map(_memory, 64, _display.BytesPerFrame);
-				}
+				_vel.X += 1;
+			}
+			if (SystemKeyboard.IsKeyDown(Keys.Down))
+			{
+				_vel.Y += 1;
 			}
 
-			new Task(() =>
+			if (SystemKeyboard.IsKeyDown(Keys.Left))
 			{
-				for (var i = 0; i < _display.Width; i++)
-				{
-					//Thread.Sleep(10);
-					_display.SetPixel(_random.Next(0, _display.Width), _random.Next(0, _display.Height), (byte)_random.Next(0, 16));
-					//_memory.Poke(_random.Next(64, _display.MemoryLength), (byte)_random.Next(0, 255));
-				}
-				_displayOutput.SetData(Util.FromBufferPerio(_display.MemoryRegion.Data));
+				_vel.X -= 1;
+			}
+			if (SystemKeyboard.IsKeyDown(Keys.Up))
+			{
+				_vel.Y -= 1;
+			}
+
+			_vel.X = (float)Math.Clamp(_vel.X, -5, 5);
+			_vel.Y = (float)Math.Clamp(_vel.Y, -5, 5);
+
+            _pos += _vel;
+
+			_vel *= 0.9f;
+			//_pos.Y += (float)gameTime.ElapsedGameTime.TotalSeconds * 5;
+
+			//_pos.X = (float)Math.Clamp(_pos.X, 0, VirtualSystem.Display.Width - 8);
+			//_pos.Y = (float)Math.Clamp(_pos.Y, 0, VirtualSystem.Display.Height - 8);
+
+			VirtualSystem.Display.Clear(0x00);
+
+            DrawSprite((int)_pos.X, (int)_pos.Y, 0);
+            DrawSprite(0, 0, 1);
+            DrawSprite(8, 0, 1);
+            DrawSprite(128, 0, 1);
+
+            new Task(() =>
+			{
+                _displayOutput.SetData(Util.FromBufferPerio(VirtualSystem.Display.MemoryRegion.Data));
 			}).Start();
+
 			base.Update(gameTime);
 			_debugUpdate.Stop();
 			Window.Title = $"{_debugUpdate.Elapsed.TotalMilliseconds}";
@@ -156,15 +150,17 @@ namespace Lega.Monogame.Shared.Perio
 			_spriteBatch.End();
 			GraphicsDevice.SetRenderTarget(null);
 
-			GraphicsDevice.Clear(VirtualSystem.Colors[15]);
+			GraphicsDevice.Clear(VirtualSystem.Colors[0]);
 			_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 			_spriteBatch.Draw(_target, _destination, Color.White);
-			var x = 0;
+			/*var x = 0;
 			var y = 0;
-			var perRow = 16;
-			for (int i = 1; i <= _memory.Capacity; i++)
+			var perRow = 32;
+			for (int i = 1; i <= 128; i++)
 			{
-				_spriteBatch.DrawString(_font, $"{_memory.Peek(i - 1):X2}", new Vector2(x, y), Color.White);
+				var value = VirtualSystem.Memory.Peek(i - 1);
+
+				_spriteBatch.DrawString(_font,$"{value:X2}", new Vector2(x, y), value > 0 ? Color.Red : Color.DarkGray);
 				if (i % perRow == 0)
 				{
 					x = 0;
@@ -172,10 +168,10 @@ namespace Lega.Monogame.Shared.Perio
 				}
 				else
 				{
-					x += _font.LineSpacing * 3;
+					x += _font.LineSpacing * 2;
 				}
 
-			}
+			}*/
 			_spriteBatch.End();
 
 			/*GraphicsDevice.Clear(Color.Black);
@@ -228,9 +224,53 @@ namespace Lega.Monogame.Shared.Perio
 				ry = 0;
 #endif
 			}
-
 			_destination = new Rectangle((int)rx, (int)ry, (int)rw, (int)rh);
 		}
 
+		public void DrawSprite(int x, int y, int id)
+		{
+			var data = VirtualSystem.SpriteData.Peek(32 * id, 32);
+			for (var col = 0; col < data.Length / 4; col++)
+			{
+				for (var row = 0; row < data.Length / 8; row++)
+				{
+					var index = col * (4) + row;
+					var @byte = data[index];
+					//first nibble
+					var takenFirst = @byte >> 4;
+					//last nibble
+					var takenLast = @byte & 0x0F;
+					var dstX = x + (row * 2);
+					var dstY = y + (col);
+					VirtualSystem.Display.SetPixel(dstX, dstY, (byte)takenFirst);
+					VirtualSystem.Display.SetPixel(dstX + 1, dstY, (byte)takenLast);
+					//Console.WriteLine($"{row} : {col}");
+				}
+			}
+			/*for (var row = 0; row < data.Length / 8; row++)
+			{
+				var @byte = data[i];
+				//first nibble
+				var takenFirst = @byte >> 4;
+				//last nibble
+				var takenLast = @byte & 0x0F;
+				var dstX = x + i;
+				var dstY = y;
+				_display.SetPixel(dstX, dstY, (byte)takenFirst);
+				_display.SetPixel(dstX, dstY, (byte)takenLast);
+			}
+			for (var i = 0; i < data.Length ; i++)
+			{
+				var @byte = data[i];
+				//first nibble
+				var takenFirst = @byte >> 4;
+				//last nibble
+				var takenLast = @byte & 0x0F;
+				var dstX = x + i;
+				var dstY = y;
+				_display.SetPixel(dstX, dstY, (byte)takenFirst);
+				_display.SetPixel(dstX, dstY, (byte)takenLast);
+			}*/
+		}
 	}
 }
