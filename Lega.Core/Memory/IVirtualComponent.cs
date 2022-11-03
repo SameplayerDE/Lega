@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lega.Core.Memory
+﻿namespace Lega.Core.Memory
 {
     public interface IVirtualComponent
     {
-        public VirtualMemoryRegion MemoryRegion { 
+        public VirtualMemoryRegion MemoryRegion
+        { 
             get; 
         }
 

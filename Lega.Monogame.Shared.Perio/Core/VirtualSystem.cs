@@ -32,16 +32,21 @@ namespace Lega.Monogame.Shared.Perio.Core
 		};
 
 		public static VirtualMemory Memory;
+
 		public static PerioDisplay Display;
 		public static VirtualKeyboard Keyboard;
+		
 		public static VirtualMemoryRegion SpriteData;
 		public static VirtualMemoryRegion UniversalData;
 
 		static VirtualSystem()
 		{
-			Memory = new VirtualMemory(131_072);
+			//Memory = new VirtualMemory(131_072);
+			//Memory = new VirtualMemory(8_148);
+			Memory = new VirtualMemory(16_296);
 			Keyboard = new VirtualKeyboard();
-			Display = new PerioDisplay(240, 160);
+			Display = new PerioDisplay(98, 64);
+			//Display = new PerioDisplay(192, 128);
 			SpriteData = new VirtualMemoryRegion();
 			UniversalData = new VirtualMemoryRegion();
 
@@ -54,7 +59,7 @@ namespace Lega.Monogame.Shared.Perio.Core
 				var keyboardLength = 16;
 
 				var spriteAdress = 0x00;
-				var spriteLength = 64;
+				var spriteLength = 512;
 
 				var univesalAdress = 0x00;
 				var universalLength = 64;
@@ -68,6 +73,7 @@ namespace Lega.Monogame.Shared.Perio.Core
 			{
 				Console.WriteLine(exception.Message);
 			}
+
             SpriteData.Poke(00, 0x55, 0x55, 0x55, 0x55);
             SpriteData.Poke(04, 0x50, 0x00, 0x00, 0x05);
             SpriteData.Poke(08, 0x50, 0x00, 0x00, 0x05);
@@ -85,6 +91,15 @@ namespace Lega.Monogame.Shared.Perio.Core
             SpriteData.Poke(52, 0x05, 0x00, 0x00, 0x50);
             SpriteData.Poke(56, 0x00, 0x50, 0x05, 0x00);
             SpriteData.Poke(60, 0x00, 0x05, 0x50, 0x00);
+
+            SpriteData.Poke(064, 0x00, 0x00, 0x00, 0x00);
+            SpriteData.Poke(068, 0x05, 0x55, 0x55, 0x00);
+            SpriteData.Poke(072, 0x05, 0x50, 0x05, 0x50);
+            SpriteData.Poke(076, 0x05, 0x50, 0x05, 0x50);
+            SpriteData.Poke(080, 0x05, 0x55, 0x55, 0x00);
+            SpriteData.Poke(084, 0x05, 0x50, 0x00, 0x00);
+            SpriteData.Poke(088, 0x05, 0x50, 0x00, 0x00);
+            SpriteData.Poke(092, 0x00, 0x00, 0x00, 0x00);
         }
 
 	}

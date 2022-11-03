@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lega.Monogame.Shared.Perio
@@ -28,6 +29,7 @@ namespace Lega.Monogame.Shared.Perio
 		private SpriteFont _font;
 
 		private Texture2D _displayOutput;
+		private Texture2D _pixel;
 		private RenderTarget2D _target;
 
 		private Rectangle _destination;
@@ -62,7 +64,7 @@ namespace Lega.Monogame.Shared.Perio
 			Window.ClientSizeChanged += OnResize;
 			IsFixedTimeStep = true;
 			MaxElapsedTime = TimeSpan.FromSeconds(1);
-			TargetElapsedTime = TimeSpan.FromSeconds(1d / 30d);
+			TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
 
 			_debugDraw = new Stopwatch();
 			_debugUpdate = new Stopwatch();
@@ -81,6 +83,8 @@ namespace Lega.Monogame.Shared.Perio
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 			_font = Content.Load<SpriteFont>("Default");
 			_displayOutput = new Texture2D(GraphicsDevice, VirtualSystem.Display.Width, VirtualSystem.Display.Height);
+            _pixel = new Texture2D(GraphicsDevice, 1, 1);
+			_pixel.SetData(new Color[] { Color.White });
 			_target = new RenderTarget2D(GraphicsDevice, VirtualSystem.Display.Width, VirtualSystem.Display.Height);
 			base.LoadContent();
 		}
@@ -98,21 +102,21 @@ namespace Lega.Monogame.Shared.Perio
 			}
 			if (SystemKeyboard.IsKeyDown(Keys.Right))
 			{
-				_vel.X += 1;
+				_vel.X += 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
 			}
 			if (SystemKeyboard.IsKeyDown(Keys.Down))
 			{
-				_vel.Y += 1;
-			}
+				_vel.Y += 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
 
 			if (SystemKeyboard.IsKeyDown(Keys.Left))
 			{
-				_vel.X -= 1;
-			}
+				_vel.X -= 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
 			if (SystemKeyboard.IsKeyDown(Keys.Up))
 			{
-				_vel.Y -= 1;
-			}
+				_vel.Y -= 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
 
 			_vel.X = (float)Math.Clamp(_vel.X, -5, 5);
 			_vel.Y = (float)Math.Clamp(_vel.Y, -5, 5);
@@ -127,19 +131,18 @@ namespace Lega.Monogame.Shared.Perio
 
 			VirtualSystem.Display.Clear(0x00);
 
-            DrawSprite((int)_pos.X, (int)_pos.Y, 0);
+            DrawSprite((int)_pos.X, (int)_pos.Y, 2);
             DrawSprite(0, 0, 1);
             DrawSprite(8, 0, 1);
             DrawSprite(128, 0, 1);
 
-            new Task(() =>
+            Task.Run(() =>
 			{
-                _displayOutput.SetData(Util.FromBufferPerio(VirtualSystem.Display.MemoryRegion.Data));
-			}).Start();
+				_displayOutput.SetData(Util.FromBufferPerio(VirtualSystem.Display.MemoryRegion.Data));
+			});
 
 			base.Update(gameTime);
 			_debugUpdate.Stop();
-			Window.Title = $"{_debugUpdate.Elapsed.TotalMilliseconds}";
 		}
 
 		protected override void Draw(GameTime gameTime)
@@ -153,12 +156,18 @@ namespace Lega.Monogame.Shared.Perio
 			GraphicsDevice.Clear(VirtualSystem.Colors[0]);
 			_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 			_spriteBatch.Draw(_target, _destination, Color.White);
-			/*var x = 0;
+
+			_spriteBatch.Draw(_pixel, new Rectangle(0, 0, 80, 8), Color.Black);
+			_spriteBatch.Draw(_pixel, new Rectangle(0, 0, 80, 8), Color.Black);
+            _spriteBatch.DrawString(_font, $"{_debugUpdate.Elapsed.TotalMilliseconds}", Vector2.Zero, Color.Yellow);
+            _spriteBatch.DrawString(_font, $"{_debugUpdate.Elapsed.TotalMilliseconds}", Vector2.Zero, Color.Yellow);
+
+            /*var x = 0;
 			var y = 0;
-			var perRow = 32;
-			for (int i = 1; i <= 128; i++)
+			var perRow = 260;
+			for (int i = 1; i <= VirtualSystem.Display.BytesPerFrame; i++)
 			{
-				var value = VirtualSystem.Memory.Peek(i - 1);
+				var value = VirtualSystem.Display.MemoryRegion.Peek(i - 1);
 
 				_spriteBatch.DrawString(_font,$"{value:X2}", new Vector2(x, y), value > 0 ? Color.Red : Color.DarkGray);
 				if (i % perRow == 0)
@@ -172,7 +181,7 @@ namespace Lega.Monogame.Shared.Perio
 				}
 
 			}*/
-			_spriteBatch.End();
+            _spriteBatch.End();
 
 			/*GraphicsDevice.Clear(Color.Black);
 			_spriteBatch.Begin(samplerState: SamplerState.PointClamp);

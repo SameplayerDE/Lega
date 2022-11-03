@@ -50,12 +50,22 @@ namespace Lega.Core.Memory
 
         public void Poke(int address, byte value)
 		{
-			_memory.Poke(address + _offset, value);
+            address += _offset;
+            if (address < _offset || _offset + _bytes <= address)
+            {
+                throw new Exception();
+            }
+            _memory.Poke(address, value);
 		}
 
 		public void Poke(int address, int length, byte value)
 		{
-			_memory.Poke(address + _offset, length, value);
+            address += _offset;
+            if (address < _offset || _offset + _bytes <= address)
+            {
+                throw new Exception();
+            }
+            _memory.Poke(address, length, value);
 		}
 
         public void Poke(int adress, params byte[] data)
@@ -70,12 +80,26 @@ namespace Lega.Core.Memory
 
         public byte Peek(int address)
 		{
-			return _memory.Peek(address + _offset);
+            address += _offset;
+            if (address < _offset || _offset + _bytes <= address)
+			{
+				throw new Exception();
+			}
+			return _memory.Peek(address);
 		}
 
         public ReadOnlySpan<byte> Peek(int address, int bytes)
         {
-            return _memory.Peek(address + _offset, bytes);
+            address += _offset;
+            if (address < _offset || _offset + _bytes <= address)
+            {
+                throw new Exception();
+            }
+            if (address + bytes < _offset || _offset + _bytes <= address + bytes)
+            {
+                throw new Exception();
+            }
+            return _memory.Peek(address, bytes);
         }
     }
 }
