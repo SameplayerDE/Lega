@@ -100,28 +100,40 @@ namespace Lega.Monogame.Shared.Perio
 					IsFullScreen = !IsFullScreen;
 				}
 			}
-			if (SystemKeyboard.IsKeyDown(Keys.Right))
+
+            var velXSpan = VirtualSystem.UniversalData.Peek(0x08, 4);
+            var velYSpan = VirtualSystem.UniversalData.Peek(0x0C, 4);
+            var velXSingle = BitConverter.ToSingle(velXSpan);
+            var velYSingle = BitConverter.ToSingle(velYSpan);
+
+            if (SystemKeyboard.IsKeyDown(Keys.Right))
 			{
-				_vel.X += 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velXSingle += 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+				
 			}
 			if (SystemKeyboard.IsKeyDown(Keys.Down))
 			{
-				_vel.Y += 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+				velYSingle += 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
 			if (SystemKeyboard.IsKeyDown(Keys.Left))
 			{
-				_vel.X -= 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velXSingle -= 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 			if (SystemKeyboard.IsKeyDown(Keys.Up))
 			{
-				_vel.Y -= 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velYSingle -= 5 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
-			_vel.X = (float)Math.Clamp(_vel.X, -5, 5);
-			_vel.Y = (float)Math.Clamp(_vel.Y, -5, 5);
+            velXSingle = (float)Math.Clamp(velXSingle, -5, 5);
+            velYSingle = (float)Math.Clamp(velYSingle, -5, 5);
 
-            _pos += _vel;
+            VirtualSystem.UniversalData.Poke(0x08, BitConverter.GetBytes(velXSingle));
+            VirtualSystem.UniversalData.Poke(0x0C, BitConverter.GetBytes(velYSingle));
+
+			_pos.X += velXSingle;
+			_pos.Y += velYSingle;
+           // _pos += _vel;
 
 			_vel *= 0.9f;
 			//_pos.Y += (float)gameTime.ElapsedGameTime.TotalSeconds * 5;
@@ -162,12 +174,12 @@ namespace Lega.Monogame.Shared.Perio
             _spriteBatch.DrawString(_font, $"{_debugUpdate.Elapsed.TotalMilliseconds}", Vector2.Zero, Color.Yellow);
             _spriteBatch.DrawString(_font, $"{_debugUpdate.Elapsed.TotalMilliseconds}", Vector2.Zero, Color.Yellow);
 
-            /*var x = 0;
+            var x = 0;
 			var y = 0;
-			var perRow = 260;
-			for (int i = 1; i <= VirtualSystem.Display.BytesPerFrame; i++)
+			var perRow = 16;
+			for (int i = 1; i <= VirtualSystem.UniversalData.Bytes; i++)
 			{
-				var value = VirtualSystem.Display.MemoryRegion.Peek(i - 1);
+				var value = VirtualSystem.UniversalData.Peek(i - 1);
 
 				_spriteBatch.DrawString(_font,$"{value:X2}", new Vector2(x, y), value > 0 ? Color.Red : Color.DarkGray);
 				if (i % perRow == 0)
@@ -180,7 +192,7 @@ namespace Lega.Monogame.Shared.Perio
 					x += _font.LineSpacing * 2;
 				}
 
-			}*/
+			}
             _spriteBatch.End();
 
 			/*GraphicsDevice.Clear(Color.Black);

@@ -34,7 +34,7 @@
 			_capacity = capacity;
 			_data = new byte[capacity];
 		}
-
+		
 		/// <summary>
 		/// write value in memory
 		/// </summary>
@@ -72,11 +72,26 @@
 		}
 
 		/// <summary>
-		/// reads value in memory
+		/// 
 		/// </summary>
-		/// <param name="address">start address in memory</param>
-		/// <returns>byte at address</returns>
-		public byte Peek(int address)
+		/// <param name="address"></param>
+		/// <param name="value"></param>
+		public void Poke(int address, float value)
+		{
+			Poke(address, BitConverter.GetBytes(value));
+		}
+
+        /*public void Poke(int address, int value)
+        {
+            Poke(address, BitConverter.GetBytes(value));
+        }*/
+
+        /// <summary>
+        /// reads value in memory
+        /// </summary>
+        /// <param name="address">start address in memory</param>
+        /// <returns>byte at address</returns>
+        public byte Peek(int address)
 		{
 			return _data[address];
 		}
@@ -123,6 +138,16 @@
 		public ReadOnlyMemory<byte> PeekReadOnlyMemory(int address, int length)
 		{
 			return (ReadOnlyMemory<byte>)_data.AsMemory().Slice(address, length);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="address"></param>
+		/// <returns></returns>
+		public float PeekSingle(int address)
+		{
+			return BitConverter.ToSingle(Peek(address, 4));
 		}
 	}
 }
