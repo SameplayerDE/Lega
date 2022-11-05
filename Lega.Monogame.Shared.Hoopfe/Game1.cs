@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Lega.Monogame.Shared.Hoopfe.Core;
 using Lega.Core.Monogame.Input;
+using System.Diagnostics;
 
 namespace Lega.Monogame.Shared.Hoopfe
 {
@@ -15,6 +16,7 @@ namespace Lega.Monogame.Shared.Hoopfe
 		private SpriteBatch _spriteBatch;
 		private SpriteFont _font;
 
+        private Stopwatch _debugUpdate;
         private Texture2D _output;
         private RenderTarget2D _target;
         private Rectangle _destination;
@@ -31,10 +33,11 @@ namespace Lega.Monogame.Shared.Hoopfe
 
         public Game1()
 		{
-			_graphics = new GraphicsDeviceManager(this);
+            _debugUpdate = new Stopwatch();
+            _graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
-		}
+        }
 
 		protected override void Initialize()
 		{
@@ -85,10 +88,14 @@ namespace Lega.Monogame.Shared.Hoopfe
                 }
             }
 
+            _debugUpdate.Restart();
+           // 
             Task.Run(() =>
             {
                 _output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x00, 4_096)));
             });
+
+            _debugUpdate.Stop();
 
             base.Update(gameTime);
 		}
@@ -128,7 +135,7 @@ namespace Lega.Monogame.Shared.Hoopfe
 			*/
 
             _spriteBatch.Draw(_target, _destination, Color.White);
-
+            _spriteBatch.DrawString(_font, $"{_debugUpdate.Elapsed.TotalMilliseconds}", Vector2.Zero, Color.Yellow);
             _spriteBatch.End();
 
 			base.Draw(gameTime);
