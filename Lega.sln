@@ -33,6 +33,11 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Lega.Monogame.Shared.Hoopfe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.Monogame.OpenGL.Hoopfe", "Lega.Monogame.OpenGL.Hoopfe\Lega.Monogame.OpenGL.Hoopfe.csproj", "{631ADA24-F8F6-488B-8A0D-7C289001D01B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Projektmappenelemente", "{1DB2AFA7-FE35-49D3-BE1D-C0A53A15DF7B}"
+	ProjectSection(SolutionItems) = preProject
+		shader.hlsl = shader.hlsl
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

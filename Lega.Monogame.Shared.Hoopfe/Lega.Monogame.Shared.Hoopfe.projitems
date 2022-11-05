@@ -9,6 +9,7 @@
     <Import_RootNamespace>Lega.Monogame.Shared.Hoopfe</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Util.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Game1.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VirtualSystem.cs" />
   </ItemGroup>
@@ -16,6 +17,7 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
     <None Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
     <None Include="$(MSBuildThisFileDirectory)Content\Default.spritefont" />
+    <None Include="$(MSBuildThisFileDirectory)Content\Shader.fx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Content\GamerGirl.ttf" />

@@ -7,6 +7,7 @@ namespace Lega.Monogame.Shared.Hoopfe
     {
 
         private VirtualMemory _systemMemory;
+        public int Capacity => _systemMemory.Capacity;
 
         private VirtualSystem()
         {
@@ -14,9 +15,10 @@ namespace Lega.Monogame.Shared.Hoopfe
             int i = 0;
             while (i < 4_096)
             {
-                Poke(i, 0xFF);
+                Poke(i, 0x00);
                 i++;
             }
+            Poke(0x00, 0b11001001);
         }
 
         public static VirtualSystem Instance { get { return Nested.instance; } }
