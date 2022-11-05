@@ -9,8 +9,6 @@ namespace Lega.Core.Memory
     public interface IVirtualMemoryRegion
     {
 
-        public IVirtualMemoryRegion(VirtualMemory memory, int offset, int bytes);
-
         public void Poke(int address, byte value);
 
         public void Poke(int address, params byte[] value);

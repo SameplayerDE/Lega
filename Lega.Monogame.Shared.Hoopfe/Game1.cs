@@ -89,7 +89,7 @@ namespace Lega.Monogame.Shared.Hoopfe
             }
 
             _debugUpdate.Restart();
-           // 
+
             Task.Run(() =>
             {
                 _output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x00, 4_096)));
