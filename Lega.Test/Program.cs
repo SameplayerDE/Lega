@@ -1,19 +1,38 @@
-﻿public class Program
+﻿using System.Threading;
+using System.Timers;
+using Timer = System.Timers.Timer;
+
+public class Program
 {
+
+    private static bool running = true;
+    static Timer timer = new Timer(1000) { AutoReset = false };
+
     public static void Main()
     {
-        // start the timer, callback in 10000 milliseconds, and don't fire more than once
-        var timer = new Timer(TimerCallback, null, 10000, Timeout.Infinite);
+        // to set up the timer
+       
+        timer.Elapsed += TimerOnElapsed;
 
-        // to reset the timer when you receive data
-        timer.Change(10000, Timeout.Infinite);
+        // to start the timer running
+        timer.Start();
 
-        // to stop the timer completely
-        timer.Change(Timeout.Infinite, Timeout.Infinite);
+        // to reset the timer
+        timer.Stop();
+        timer.Start();
+
+        while (running)
+        {
+            
+        }
     }
 
-    public static void TimerCallback(object state)
+
+    // and the callback
+    private static void TimerOnElapsed(object sender, ElapsedEventArgs args)
     {
-        Console.WriteLine("Test");
+        var time = (long)(args.SignalTime - new DateTime(1970, 1, 1)).TotalMilliseconds;
+        Console.WriteLine("Hallo" + time);
+        timer.Start();
     }
 }
