@@ -29,9 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Perio", "Perio", "{B4D4072E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hoopfe", "Hoopfe", "{8574FAE6-34DB-44C4-8F2B-7820F8F1EAE7}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Lega.Monogame.Shared.Hoopfe", "Lega.Monogame.DirectX.Hoopfe\Lega.Monogame.Shared.Hoopfe.shproj", "{44B04FA7-BE8C-4923-9C3B-41D3D5B90C36}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Lega.Monogame.Shared.Hoopfe", "Lega.Monogame.Shared.Hoopfe\Lega.Monogame.Shared.Hoopfe.shproj", "{59108F44-9760-432F-B3F8-12916AB43042}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lega.Monogame.OpenGL.Hoopfe", "Lega.Monogame.OpenGL.Hoopfe\Lega.Monogame.OpenGL.Hoopfe.csproj", "{17F0F5BD-A095-472A-8A1E-CD3E3CD8A4C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.Monogame.OpenGL.Hoopfe", "Lega.Monogame.OpenGL.Hoopfe\Lega.Monogame.OpenGL.Hoopfe.csproj", "{631ADA24-F8F6-488B-8A0D-7C289001D01B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,10 +75,10 @@ Global
 		{E025139E-7FC7-4A60-B2E7-E41FDF732221}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E025139E-7FC7-4A60-B2E7-E41FDF732221}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E025139E-7FC7-4A60-B2E7-E41FDF732221}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{17F0F5BD-A095-472A-8A1E-CD3E3CD8A4C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17F0F5BD-A095-472A-8A1E-CD3E3CD8A4C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17F0F5BD-A095-472A-8A1E-CD3E3CD8A4C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17F0F5BD-A095-472A-8A1E-CD3E3CD8A4C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{631ADA24-F8F6-488B-8A0D-7C289001D01B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{631ADA24-F8F6-488B-8A0D-7C289001D01B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{631ADA24-F8F6-488B-8A0D-7C289001D01B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{631ADA24-F8F6-488B-8A0D-7C289001D01B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,15 +92,15 @@ Global
 		{E025139E-7FC7-4A60-B2E7-E41FDF732221} = {B4D4072E-59FA-48B7-A559-C3390CFA0DF2}
 		{B4D4072E-59FA-48B7-A559-C3390CFA0DF2} = {7CFBA1C6-2259-4C69-9DA2-387B71CF0572}
 		{8574FAE6-34DB-44C4-8F2B-7820F8F1EAE7} = {7CFBA1C6-2259-4C69-9DA2-387B71CF0572}
-		{44B04FA7-BE8C-4923-9C3B-41D3D5B90C36} = {8574FAE6-34DB-44C4-8F2B-7820F8F1EAE7}
-		{17F0F5BD-A095-472A-8A1E-CD3E3CD8A4C7} = {8574FAE6-34DB-44C4-8F2B-7820F8F1EAE7}
+		{59108F44-9760-432F-B3F8-12916AB43042} = {8574FAE6-34DB-44C4-8F2B-7820F8F1EAE7}
+		{631ADA24-F8F6-488B-8A0D-7C289001D01B} = {8574FAE6-34DB-44C4-8F2B-7820F8F1EAE7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB2276D0-4F87-47B6-B31C-87327957A92A}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Lega.Monogame.DirectX.Hoopfe\Lega.Monogame.DirectX.Hoopfe.projitems*{17f0f5bd-a095-472a-8a1e-cd3e3cd8a4c7}*SharedItemsImports = 5
-		Lega.Monogame.DirectX.Hoopfe\Lega.Monogame.DirectX.Hoopfe.projitems*{44b04fa7-be8c-4923-9c3b-41d3d5b90c36}*SharedItemsImports = 13
+		Lega.Monogame.Shared.Hoopfe\Lega.Monogame.Shared.Hoopfe.projitems*{59108f44-9760-432f-b3f8-12916ab43042}*SharedItemsImports = 13
+		Lega.Monogame.Shared.Hoopfe\Lega.Monogame.Shared.Hoopfe.projitems*{631ada24-f8f6-488b-8a0d-7c289001d01b}*SharedItemsImports = 5
 		Lega.Monogame.Shared.Perio\Lega.Monogame.Shared.Perio.projitems*{80b7f3cd-693f-40d1-b73a-6771c310668c}*SharedItemsImports = 5
 		Lega.Monogame.Shared.Perio\Lega.Monogame.Shared.Perio.projitems*{a0cdbd0e-3a41-42b7-9425-a838bc2c7383}*SharedItemsImports = 13
 		Lega.Monogame.Shared.Perio\Lega.Monogame.Shared.Perio.projitems*{ad6c6166-dc67-4e60-9240-94bbf5a5075a}*SharedItemsImports = 5

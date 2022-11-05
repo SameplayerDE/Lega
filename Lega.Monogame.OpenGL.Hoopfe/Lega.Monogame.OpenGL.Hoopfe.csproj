@@ -29,5 +29,5 @@
     <Message Text="Restoring dotnet tools" Importance="High" />
     <Exec Command="dotnet tool restore" />
   </Target>
-  <Import Project="..\Lega.Monogame.DirectX.Hoopfe\Lega.Monogame.DirectX.Hoopfe.projitems" Label="Shared" />
+  <Import Project="..\Lega.Monogame.Shared.Hoopfe\Lega.Monogame.Shared.Hoopfe.projitems" Label="Shared" />
 </Project>

@@ -10,7 +10,13 @@ namespace Lega.Monogame.Shared.Hoopfe
 
         private VirtualSystem()
         {
-            _systemMemory = new VirtualMemory(512);
+            _systemMemory = new VirtualMemory(4_096);
+            int i = 0;
+            while (i < 4_096)
+            {
+                Poke(i, 0xFF);
+                i++;
+            }
         }
 
         public static VirtualSystem Instance { get { return Nested.instance; } }
