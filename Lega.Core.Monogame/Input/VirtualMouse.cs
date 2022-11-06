@@ -19,16 +19,6 @@ namespace Lega.Core.Monogame.Input
             int offY = rect.Y;
             X = SystemMouse.Position.X - offX;
             Y = SystemMouse.Position.Y - offY;
-            X /= (float)rect.Width;
-            Y /= (float)rect.Height;
-            X *= (float)w;
-            Y *= (float)h;
-            // Y = (int)(Y / scaleY);
-            Console.WriteLine($"X : {SystemMouse.Position.X}");
-             Console.WriteLine($"OffX : {offX}");
-             Console.WriteLine($"CalcX : {X}");
-             Console.WriteLine($"");
-
         }
 
         public void Update(GameTime gameTime)
