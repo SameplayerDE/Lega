@@ -202,12 +202,22 @@
             _data[address] = value;
         }
 
-        public void Poke(int adress, params byte[] data)
+        public void Poke(int address, params byte[] value)
         {
             int offset = 0;
-            while (offset < data.Length)
+            while (offset < value.Length)
             {
-                Poke(adress + offset, data[offset]);
+                Poke(address + offset, value[offset]);
+                offset++;
+            }
+        }
+
+        public void Poke(int address, ReadOnlySpan<byte> value)
+        {
+            int offset = 0;
+            while (offset < value.Length)
+            {
+                Poke(address + offset, value[offset]);
                 offset++;
             }
         }
@@ -228,10 +238,21 @@
             {
                 throw new Exception();
             }
+
+            /*
+			ushort upper = (ushort)(value >> 16);
+			ushort lower = (ushort)(value & 0x0000FFFF);
+
+			Poke(address + 0, (byte)(upper >> 8));
+			Poke(address + 1, (byte)(upper & 0x00FF));
+			Poke(address + 2, (byte)(lower >> 8));
+			Poke(address + 3, (byte)(lower & 0x00FF));
+			*/
+
             _data[address + 0] = (byte)(value >> 24);
-            _data[address + 1] = (byte)(value >> 16 & 0x00FF);
-            _data[address + 2] = (byte)(value & 0x0000FF00 >> 8);
-            _data[address + 3] = (byte)(value & 0x000000FF);
+            _data[address + 1] = (byte)(value >> 16);
+            _data[address + 2] = (byte)(value >> 08);
+            _data[address + 3] = (byte)(value >> 00);
         }
     }
 }

@@ -9,16 +9,46 @@ namespace Lega.Monogame.Shared.Hoopfe.Core
     public static class Util
     {
 
-        public static Color[] Colors { get; } =
+        public static Color[,] Palettes { get; } =
         {
-			Util.FromHex("211f1f"),
-			//Color.Transparent,
-            Util.FromHex("372c38"),
-            Util.FromHex("7a7272"),
-            Util.FromHex("ababab"),
+            {
+                Util.FromHex("211f1f"),
+			    //Color.Transparent,
+                Util.FromHex("372c38"),
+                Util.FromHex("7a7272"),
+                Util.FromHex("ababab"), 
+            },
+            {
+                Util.FromHex("471e4c"),
+			    //Color.Transparent,
+                Util.FromHex("876bb2"),
+                Util.FromHex("ffefff"),
+                Util.FromHex("f7b58c"),
+            },
+            {
+                Util.FromHex("00303b"),
+			    //Color.Transparent,
+                Util.FromHex("ff7777"),
+                Util.FromHex("ffce96"),
+                Util.FromHex("f1f2da"),
+            },
+            {
+                Util.FromHex("211e20"),
+			    //Color.Transparent,
+                Util.FromHex("555568"),
+                Util.FromHex("a0a08b"),
+                Util.FromHex("e9efec"),
+            },
+            {
+                Util.FromHex("0f0f1b"),
+			    //Color.Transparent,
+                Util.FromHex("565a75"),
+                Util.FromHex("c6b7be"),
+                Util.FromHex("fafbf6"),
+            },
         };
 
-        public static Color[] FromBuffer(ReadOnlySpan<byte> data)
+        public static Color[] FromBuffer(ReadOnlySpan<byte> data, int pal = 0)
         {
             var result = new Color[data.Length * 4];
             for (var i = 0; i < result.Length; i += 4)
@@ -32,17 +62,17 @@ namespace Lega.Monogame.Shared.Hoopfe.Core
                 int c = lower >> 2;
                 int d = lower & 0x03;
 
-                result[i + 0] = GetColor(a);
-                result[i + 1] = GetColor(b);
-                result[i + 2] = GetColor(c);
-                result[i + 3] = GetColor(d);
+                result[i + 0] = GetColor(pal, a);
+                result[i + 1] = GetColor(pal, b);
+                result[i + 2] = GetColor(pal, c);
+                result[i + 3] = GetColor(pal, d);
             }
             return result;
         }
 
-        public static Color GetColor(int a)
+        public static Color GetColor(int pal, int a)
         {
-            return Colors[a % 4];
+            return Palettes[pal % Palettes.GetLength(0), a % 4];
         }
 
         public static Color FromHex(string hex)

@@ -3,11 +3,13 @@ using System.Linq;
 using System.Windows.Input;
 using System;
 using Lega.Core.Memory;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Lega.Core.Monogame.Graphics
 {
-    public class VirtualDisplay : VirtualComponent
+    public class VirtualDisplay : VirtualComponent, IUpdateable
     {
+        /*
         private int _width;
         private int _height;
         private int _bytesPerPixel;
@@ -37,6 +39,14 @@ namespace Lega.Core.Monogame.Graphics
                 throw new ArgumentException($"memory has not enough space for the display to be stored. Total of {BytesPerFrame} bytes has to be free.");
             }
             base.Map(memory, offset, bytes);
+        }
+        */
+
+        private Texture2D _output;
+
+        public void Update(Microsoft.Xna.Framework.GameTime gameTime)
+        {
+            
         }
     }
 }

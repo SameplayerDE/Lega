@@ -18,6 +18,8 @@ namespace Lega.Core.Memory
 
         public void Poke(int address, params byte[] value);
 
+        public void Poke(int address, ReadOnlySpan<byte> value);
+
         public void Poke2(int address, ushort value);
 
         public void Poke4(int address, uint value);

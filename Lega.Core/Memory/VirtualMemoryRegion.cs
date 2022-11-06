@@ -103,7 +103,7 @@
 
         public int Bytes => _bytes;
 
-        public int Offset => throw new NotImplementedException();
+        public int Offset => _offset;
 
         public VirtualMemoryRegion() { }
 
@@ -153,12 +153,22 @@
             _memory.Poke(address, value);
         }
 
-        public void Poke(int adress, params byte[] data)
+        public void Poke(int adress, params byte[] value)
         {
             int offset = 0;
-            while (offset < data.Length)
+            while (offset < value.Length)
             {
-                Poke(adress + offset, data[offset]);
+                Poke(adress + offset, value[offset]);
+                offset++;
+            }
+        }
+
+        public void Poke(int adress, ReadOnlySpan<byte> value)
+        {
+            int offset = 0;
+            while (offset < value.Length)
+            {
+                Poke(adress + offset, value[offset]);
                 offset++;
             }
         }

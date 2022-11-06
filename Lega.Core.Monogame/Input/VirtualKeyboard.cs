@@ -12,6 +12,8 @@ namespace Lega.Core.Monogame.Input
 
         public void Update(GameTime gameTime)
         {
+
+
             _prev = _curr;
             _curr = Keyboard.GetState();
 

@@ -16,6 +16,7 @@ namespace Lega.Monogame.Shared.Hoopfe
 		private SpriteBatch _spriteBatch;
 		private SpriteFont _font;
 
+        private Random _random;
         private Stopwatch _debugUpdate;
         private Texture2D _output;
         private RenderTarget2D _target;
@@ -41,9 +42,10 @@ namespace Lega.Monogame.Shared.Hoopfe
 
 		protected override void Initialize()
 		{
+            _random = new Random();
 
-			_graphics.PreferredBackBufferWidth = 720;
-			_graphics.PreferredBackBufferHeight = 480;
+            _graphics.PreferredBackBufferWidth = 128;
+			_graphics.PreferredBackBufferHeight = 128;
 			_graphics.PreferredBackBufferFormat = SurfaceFormat.Color;
 			_graphics.PreferredDepthStencilFormat = DepthFormat.Depth24; // <-- set depth here
 
@@ -75,8 +77,9 @@ namespace Lega.Monogame.Shared.Hoopfe
         {
             Task.Run(() =>
             {
-                _output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096)));
+               
             });
+            _output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096)));
         }
 
         protected override void LoadContent()
@@ -87,6 +90,8 @@ namespace Lega.Monogame.Shared.Hoopfe
             _output = new Texture2D(GraphicsDevice, 128, 128);
             _target = new RenderTarget2D(GraphicsDevice, 128, 128);
 
+
+            /*
             VirtualSystem.Instance.Poke4(0x400, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
             VirtualSystem.Instance.Poke4(0x420, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
             VirtualSystem.Instance.Poke4(0x440, 0b00_00_00_11_11_11_00_00_00_00_11_11_11_00_00_00);
@@ -103,11 +108,18 @@ namespace Lega.Monogame.Shared.Hoopfe
             VirtualSystem.Instance.Poke4(0x5A0, 0b00_00_00_00_00_00_00_11_11_00_00_00_00_00_00_00);
             VirtualSystem.Instance.Poke4(0x5C0, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
             VirtualSystem.Instance.Poke4(0x5E0, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
+            */
         }
 
 		protected override void Update(GameTime gameTime)
 		{
+            _debugUpdate.Restart();
             SystemKeyboard.Update(gameTime);
+            SystemMouse.Update(gameTime);
+            VirtualSystem.Instance.Update(gameTime);
+
+            VirtualSystem.Instance._mouse.Map(_destination, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
             if (SystemKeyboard.IsKeyDown(Keys.LeftAlt))
             {
                 if (SystemKeyboard.IsKeyDownOnce(Keys.Enter))
@@ -116,7 +128,15 @@ namespace Lega.Monogame.Shared.Hoopfe
                 }
             }
 
-            Console.WriteLine(_debugUpdate.ElapsedTicks);
+
+            if (SystemMouse.StateChange)
+            {
+                VirtualSystem.Instance.DrawSprite((int)VirtualSystem.Instance._mouse.X, (int)VirtualSystem.Instance._mouse.Y, 00);
+            
+            }
+            
+            _debugUpdate.Stop();
+            //Console.WriteLine(_debugUpdate.ElapsedTicks);
 
             base.Update(gameTime);
 		}
@@ -182,9 +202,6 @@ namespace Lega.Monogame.Shared.Hoopfe
             {
                 rh = rw / aspectRatioVirtualDisplay;
                 ry = (height - rh) / 2f;
-#if __MOBILE__
-				ry = 0;
-#endif
             }
             _destination = new Rectangle((int)rx, (int)ry, (int)rw, (int)rh);
         }
