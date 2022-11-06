@@ -38,6 +38,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Pr
 		shader.hlsl = shader.hlsl
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.LoopTime", "Lega.LoopTime\Lega.LoopTime.csproj", "{2312CE21-D5FC-4082-A384-AEC13C8CCC6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.SFML.Demo", "Lega.SFML.Demo\Lega.SFML.Demo.csproj", "{63D785A9-D54E-4C1C-A285-FC54FDDDA085}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +86,14 @@ Global
 		{631ADA24-F8F6-488B-8A0D-7C289001D01B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{631ADA24-F8F6-488B-8A0D-7C289001D01B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{631ADA24-F8F6-488B-8A0D-7C289001D01B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2312CE21-D5FC-4082-A384-AEC13C8CCC6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2312CE21-D5FC-4082-A384-AEC13C8CCC6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2312CE21-D5FC-4082-A384-AEC13C8CCC6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2312CE21-D5FC-4082-A384-AEC13C8CCC6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63D785A9-D54E-4C1C-A285-FC54FDDDA085}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63D785A9-D54E-4C1C-A285-FC54FDDDA085}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63D785A9-D54E-4C1C-A285-FC54FDDDA085}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63D785A9-D54E-4C1C-A285-FC54FDDDA085}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
