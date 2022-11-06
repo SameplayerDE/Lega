@@ -1,7 +1,9 @@
 ﻿using SFML.Graphics;
+using SFML.System;
 using SFML.Window;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +18,8 @@ namespace Lega.SFML.Demo
         private Texture _texture;
         private Sprite _sprite;
         private uint _x = 0;
-        private uint _y = 0;
+        private uint _y = 64;
+        public Clock Timer { get; set; }
 
         public void Run()
         {
@@ -29,7 +32,8 @@ namespace Lega.SFML.Demo
             _image = new Image(128, 128);
             _texture = new Texture(128, 128);
             _sprite = new Sprite();
-
+            Timer = new Clock();
+            Timer.Restart();
             _window.Run();
         }
 
@@ -45,9 +49,13 @@ namespace Lega.SFML.Demo
 
         public void Tick(object sender, EventArgs eventArgs)
         {
-            _image.SetPixel(_x, _y, Color.White);
-            _texture.Update(_image);
-            _sprite.Texture = _texture;
+            _y = _y + 1;
+            if (_y >= 128)
+            {
+                Console.WriteLine(Timer.ElapsedTime.AsSeconds());
+                _y = 64;
+                Timer.Restart();
+            }
         }
 
         public void Render(object sender, EventArgs eventArgs)

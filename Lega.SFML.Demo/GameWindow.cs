@@ -66,7 +66,7 @@ namespace Lega.SFML.Demo
             int lastTime = _timer.ElapsedTime.AsMilliseconds();
             int lastTimer = _timer.ElapsedTime.AsMilliseconds(); //to output the ticks and fps in the console
             double unprocessed = 0; //counts unprocessed ticks to compensate
-            double msPerTick = 1000 / 60d; //frames per seconds
+            double msPerTick = 1000 / 30d; //frames per seconds
             int frames = 0;
             int ticks = 0;
 
