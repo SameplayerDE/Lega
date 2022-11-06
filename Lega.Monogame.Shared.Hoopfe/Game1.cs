@@ -60,12 +60,23 @@ namespace Lega.Monogame.Shared.Hoopfe
             Window.AllowUserResizing = true;
 
             PerformScreenFit(128, 128);
+
+            VirtualSystem.Instance.MemoryChange += OnMemoryChange;
+
             base.Initialize();
 		}
 
         private void OnResize(object sender, EventArgs e)
         {
             PerformScreenFit(128, 128);
+        }
+
+        private void OnMemoryChange(object sender, EventArgs eventArgs)
+        {
+            Task.Run(() =>
+            {
+                _output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x00, 4_096)));
+            });
         }
 
         protected override void LoadContent()
@@ -75,6 +86,23 @@ namespace Lega.Monogame.Shared.Hoopfe
 
             _output = new Texture2D(GraphicsDevice, 128, 128);
             _target = new RenderTarget2D(GraphicsDevice, 128, 128);
+
+            VirtualSystem.Instance.Poke4(0x400, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
+            VirtualSystem.Instance.Poke4(0x420, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
+            VirtualSystem.Instance.Poke4(0x440, 0b00_00_00_11_11_11_00_00_00_00_11_11_11_00_00_00);
+            VirtualSystem.Instance.Poke4(0x460, 0b00_00_11_00_00_00_11_00_00_11_00_00_00_11_00_00);
+            VirtualSystem.Instance.Poke4(0x480, 0b00_11_00_00_00_00_00_11_11_00_00_00_00_00_11_00);
+            VirtualSystem.Instance.Poke4(0x4A0, 0b00_11_00_00_00_00_00_00_00_00_00_00_00_00_11_00);
+            VirtualSystem.Instance.Poke4(0x4C0, 0b00_11_00_00_00_00_00_00_00_00_00_00_00_00_11_00);
+            VirtualSystem.Instance.Poke4(0x4E0, 0b00_11_00_00_00_00_00_00_00_00_00_00_00_00_11_00);
+            VirtualSystem.Instance.Poke4(0x500, 0b00_00_11_00_00_00_00_00_00_00_00_00_00_11_00_00);
+            VirtualSystem.Instance.Poke4(0x520, 0b00_00_00_11_00_00_00_00_00_00_00_00_11_00_00_00);
+            VirtualSystem.Instance.Poke4(0x540, 0b00_00_00_00_11_00_00_00_00_00_00_11_00_00_00_00);
+            VirtualSystem.Instance.Poke4(0x560, 0b00_00_00_00_00_11_00_00_00_00_11_00_00_00_00_00);
+            VirtualSystem.Instance.Poke4(0x580, 0b00_00_00_00_00_00_11_00_00_11_00_00_00_00_00_00);
+            VirtualSystem.Instance.Poke4(0x5A0, 0b00_00_00_00_00_00_00_11_11_00_00_00_00_00_00_00);
+            VirtualSystem.Instance.Poke4(0x5C0, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
+            VirtualSystem.Instance.Poke4(0x5E0, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
         }
 
 		protected override void Update(GameTime gameTime)
@@ -88,14 +116,7 @@ namespace Lega.Monogame.Shared.Hoopfe
                 }
             }
 
-            _debugUpdate.Restart();
-
-            Task.Run(() =>
-            {
-                _output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x00, 4_096)));
-            });
-
-            _debugUpdate.Stop();
+            Console.WriteLine(_debugUpdate.ElapsedTicks);
 
             base.Update(gameTime);
 		}
@@ -114,7 +135,7 @@ namespace Lega.Monogame.Shared.Hoopfe
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-            /*
+            
 			var x = 0;
 			var y = 0;
 			var perRow = 32;
@@ -132,7 +153,7 @@ namespace Lega.Monogame.Shared.Hoopfe
 					x += _font.LineSpacing * 2;
 				}
 			}
-			*/
+			
 
             _spriteBatch.Draw(_target, _destination, Color.White);
             _spriteBatch.DrawString(_font, $"{_debugUpdate.Elapsed.TotalMilliseconds}", Vector2.Zero, Color.Yellow);
