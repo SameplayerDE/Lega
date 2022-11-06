@@ -9,7 +9,7 @@ namespace Lega.Monogame.Shared.Hoopfe
         private VirtualMemory _systemMemory;
         private VirtualMemoryRegion _systemData;
         private VirtualMemoryRegion _systemDisplayData;
-        public int Capacity => _systemMemory.Capacity;
+        public int Capacity => _systemMemory.Bytes;
         public event EventHandler MemoryChange;
 
         private VirtualSystem()
@@ -45,11 +45,11 @@ namespace Lega.Monogame.Shared.Hoopfe
             MemoryChange?.Invoke(null, EventArgs.Empty);
         }
 
-        public void Poke(int address, params byte[] value)
+        /*public void Poke(int address, params byte[] value)
         {
             _systemMemory.Poke(address, value);
             MemoryChange?.Invoke(null, EventArgs.Empty);
-        }
+        }*/
 
         public void Poke2(int address, ushort value)
         {

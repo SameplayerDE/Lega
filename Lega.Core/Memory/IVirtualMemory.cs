@@ -9,17 +9,28 @@ namespace Lega.Core.Memory
 	public interface IVirtualMemory
 	{
 
-		public void Poke(int address, byte value);
+        public int Bytes
+        {
+            get;
+        }
 
-		public void Poke(int address, params byte[] value);
+        public void Poke(int address, byte value);
 
-		//public void Poke(int address, float value);
+        public void Poke(int address, params byte[] value);
 
-		public byte Peek(int address);
+        public void Poke2(int address, ushort value);
 
-		public ReadOnlySpan<byte> Peek(int address, int bytes);
+        public void Poke4(int address, uint value);
 
-		//public float PeekFloat(int address, int bytes);
+        public byte Peek(int address);
 
-	}
+        //public ReadOnlySpan<byte> Peek2(int address, int bytes);
+
+        //public ReadOnlySpan<byte> Peek4(int address, int bytes);
+
+        public ReadOnlySpan<byte> Peek(int address, int bytes);
+
+        public bool Contains(int address);
+        public bool Contains(int address, int bytes);
+    }
 }

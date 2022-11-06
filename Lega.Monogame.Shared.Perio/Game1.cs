@@ -129,6 +129,7 @@ namespace Lega.Monogame.Shared.Perio
             velYSingle = (float)Math.Clamp(velYSingle, -5, 5);
 
             VirtualSystem.UniversalData.Poke(0x08, BitConverter.GetBytes(velXSingle));
+            //VirtualSystem.UniversalData.Poke4(0x08, BitConverter.GetBytes(velXSingle));
             VirtualSystem.UniversalData.Poke(0x0C, BitConverter.GetBytes(velYSingle));
 
 			_pos.X += velXSingle;
@@ -150,7 +151,7 @@ namespace Lega.Monogame.Shared.Perio
 
             Task.Run(() =>
 			{
-				_displayOutput.SetData(Util.FromBufferPerio(VirtualSystem.Display.MemoryRegion.Data));
+				_displayOutput.SetData(Util.FromBufferPerio(VirtualSystem.Display.MemoryRegion.Peek(0x00, VirtualSystem.Display.BytesPerFrame)));
 			});
 
 			base.Update(gameTime);

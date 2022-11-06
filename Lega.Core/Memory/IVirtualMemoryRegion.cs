@@ -6,20 +6,10 @@ using System.Threading.Tasks;
 
 namespace Lega.Core.Memory
 {
-    public interface IVirtualMemoryRegion
+    public interface IVirtualMemoryRegion : IVirtualMemory
     {
+        public int Offset { get; }
 
-        public void Poke(int address, byte value);
-
-        public void Poke(int address, params byte[] value);
-
-        public void Poke2(int address, ushort value);
-
-        public void Poke4(int address, uint value);
-
-        public byte Peek(int address);
-
-        public ReadOnlySpan<byte> Peek(int address, int bytes);
-
+        public void Map(VirtualMemory memory, int offset, int bytes);
     }
 }

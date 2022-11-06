@@ -69,7 +69,7 @@ namespace Lega.Monogame.Shared.Perio.Core
 			{
 				throw new ArgumentException($"not enough bytes to store display data. Total of {BytesPerFrame} bytes has to be mapped.");
 			}
-			if (memory.Capacity < BytesPerFrame)
+			if (memory.Bytes < BytesPerFrame)
 			{
 				throw new ArgumentException($"memory has not enough space for the display to be stored. Total of {BytesPerFrame} bytes has to be free.");
 			}
@@ -80,7 +80,12 @@ namespace Lega.Monogame.Shared.Perio.Core
 		{
 			//fill
 			//data %= 16;
-			MemoryRegion.Poke(0, MemoryRegion.Bytes, 0x00);
+			int i = 0;
+			while (i < MemoryRegion.Bytes)
+			{
+                MemoryRegion.Poke(i, 0x00);
+                i++;
+			}
 		}
 	}
 }

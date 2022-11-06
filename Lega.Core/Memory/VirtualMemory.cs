@@ -3,8 +3,9 @@
 	/// <summary>
 	/// represents memory for the virtual system
 	/// </summary>
-	public class VirtualMemory
+	public class VirtualMemory : IVirtualMemory
 	{
+        /*
 		/// <summary>
 		/// data used by the virtual memory
 		/// </summary>
@@ -81,10 +82,10 @@
 			Poke(address, BitConverter.GetBytes(value));
 		}
 
-        /*public void Poke(int address, int value)
-        {
-            Poke(address, BitConverter.GetBytes(value));
-        }*/
+        //public void Poke(int address, int value)
+        //{
+        //    Poke(address, BitConverter.GetBytes(value));
+        //}
 
         /// <summary>
         /// reads value in memory
@@ -149,5 +150,88 @@
 		{
 			return BitConverter.ToSingle(Peek(address, 4));
 		}
-	}
+		*/
+
+        private byte[] _data;
+        private int _bytes;
+
+        public int Bytes => _bytes;
+
+        public VirtualMemory(int bytes)
+        {
+            _bytes = bytes;
+            _data = new byte[bytes];
+        }
+
+        public bool Contains(int address)
+        {
+            return address >= 0 && address < _bytes;
+        }
+
+        public bool Contains(int address, int bytes)
+        {
+			bytes -= 1;
+            return Contains(address) && address + bytes >= 0 && address + bytes < _bytes;
+        }
+
+        public byte Peek(int address)
+		{
+			if (!Contains(address))
+			{
+				throw new Exception();
+			}
+			return _data[address];
+		}
+
+
+        public ReadOnlySpan<byte> Peek(int address, int bytes)
+        {
+            if (!Contains(address, bytes))
+            {
+                throw new Exception();
+            }
+            return (ReadOnlySpan<byte>)_data.AsSpan().Slice(address, bytes);
+        }
+
+        public void Poke(int address, byte value)
+		{
+            if (!Contains(address))
+            {
+                throw new Exception();
+            }
+            _data[address] = value;
+        }
+
+        public void Poke(int adress, params byte[] data)
+        {
+            int offset = 0;
+            while (offset < data.Length)
+            {
+                Poke(adress + offset, data[offset]);
+                offset++;
+            }
+        }
+
+        public void Poke2(int address, ushort value)
+		{
+            if (!Contains(address, 2))
+            {
+                throw new Exception();
+            }
+			_data[address + 0] = (byte)(value >> 8);
+			_data[address + 1] = (byte)(value & 0x00FF);
+        }
+
+		public void Poke4(int address, uint value)
+		{
+            if (!Contains(address, 4))
+            {
+                throw new Exception();
+            }
+            _data[address + 0] = (byte)(value >> 24);
+            _data[address + 1] = (byte)(value >> 16 & 0x00FF);
+            _data[address + 2] = (byte)(value & 0x0000FF00 >> 8);
+            _data[address + 3] = (byte)(value & 0x000000FF);
+        }
+    }
 }

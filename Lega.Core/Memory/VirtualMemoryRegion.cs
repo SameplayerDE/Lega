@@ -1,7 +1,8 @@
 ﻿namespace Lega.Core.Memory
 {
-	public class VirtualMemoryRegion
-	{
+    public class VirtualMemoryRegion : IVirtualMemoryRegion
+    {
+        /*
 		private VirtualMemory _memory;
 		private int _offset = 0;
 		private int _bytes = 1;
@@ -93,6 +94,104 @@
                 throw new Exception();
             }
             return _memory.Peek(address, bytes);
+        }
+        */
+
+        private VirtualMemory _memory;
+        private int _offset = 0;
+        private int _bytes = 1;
+
+        public int Bytes => _bytes;
+
+        public int Offset => throw new NotImplementedException();
+
+        public VirtualMemoryRegion() { }
+
+        public VirtualMemoryRegion(VirtualMemory memory, int offset, int bytes)
+        {
+            Map(memory, offset, bytes);
+        }
+
+        public bool Contains(int address)
+        {
+            return address >= _offset && address < _offset + _bytes;
+        }
+
+        public bool Contains(int address, int bytes)
+        {
+            bytes -= 1;
+            return Contains(address) && address + bytes >= _offset && address + bytes < _offset + _bytes;
+        }
+
+        public byte Peek(int address)
+        {
+            address += _offset;
+            if (!Contains(address))
+            {
+                throw new Exception();
+            }
+            return _memory.Peek(address);
+        }
+
+        public ReadOnlySpan<byte> Peek(int address, int bytes)
+        {
+            address += _offset;
+            if (!Contains(address, bytes))
+            {
+                throw new Exception();
+            }
+            return _memory.Peek(address, bytes);
+        }
+
+        public void Poke(int address, byte value)
+        {
+            address += _offset;
+            if (!Contains(address))
+            {
+                throw new Exception();
+            }
+            _memory.Poke(address, value);
+        }
+
+        public void Poke(int adress, params byte[] data)
+        {
+            int offset = 0;
+            while (offset < data.Length)
+            {
+                Poke(adress + offset, data[offset]);
+                offset++;
+            }
+        }
+
+        public void Poke2(int address, ushort value)
+        {
+            address += _offset;
+            if (!Contains(address))
+            {
+                throw new Exception();
+            }
+            _memory.Poke2(address, value);
+        }
+
+        public void Poke4(int address, uint value)
+        {
+            address += _offset;
+            if (!Contains(address))
+            {
+                throw new Exception();
+            }
+            _memory.Poke4(address, value);
+        }
+
+        public void Map(VirtualMemory memory, int offset, int bytes)
+        {
+            if (!memory.Contains(offset, bytes))
+            {
+                throw new Exception();
+            }
+            _memory = memory;
+            _offset = offset;
+            _bytes = bytes;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Lega.Core.Monogame.Graphics
             {
                 throw new ArgumentOutOfRangeException($"not enough bytes to store display data. Display is using {_bytesPerPixel} bytes per pixel and has {_pixelCount}. Total of {BytesPerFrame} bytes has to be mapped.");
             }
-            if (memory.Capacity < BytesPerFrame)
+            if (memory.Bytes < BytesPerFrame)
             {
                 throw new ArgumentException($"memory has not enough space for the display to be stored. Total of {BytesPerFrame} bytes has to be free.");
             }

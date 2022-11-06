@@ -16,7 +16,7 @@ namespace Lega.Core.Memory
 
         public virtual void Map(VirtualMemory memory, int offset, int bytes)
         {
-            if (offset + bytes > memory.Capacity)
+            if (offset + bytes > memory.Bytes)
             {
                 throw new ArgumentOutOfRangeException("mapped outside of virtual memory bounds");
             }
