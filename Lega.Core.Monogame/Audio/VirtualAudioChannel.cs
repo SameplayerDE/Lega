@@ -13,6 +13,18 @@ namespace Lega.Core.Monogame.Audio
     {
         public SignalGeneratorType SignalType;
         public SignalGenerator SignalGenerator;
+       
+        public double Gain
+        {
+            get => SignalGenerator.Gain;
+            set => SignalGenerator.Gain = value;
+        }
+
+        public double Frequency
+        {
+            get => SignalGenerator.Frequency;
+            set => SignalGenerator.Frequency = value;
+        }
 
         public VirtualAudioChannel(SignalGeneratorType type)
         {
