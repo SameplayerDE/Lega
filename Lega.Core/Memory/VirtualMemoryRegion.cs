@@ -203,5 +203,20 @@
             _offset = offset;
             _bytes = bytes;
         }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear(int address)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear(int address, int bytes)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

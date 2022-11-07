@@ -15,10 +15,19 @@ namespace Lega.Core.Monogame.Input
 
         public void Map(Rectangle rect, int w, int h)
         {
-            int offX = rect.X;
-            int offY = rect.Y;
-            X = SystemMouse.Position.X - offX;
-            Y = SystemMouse.Position.Y - offY;
+            float sx = SystemMouse.Position.X - rect.X;
+            float sy = SystemMouse.Position.Y - rect.Y;
+
+            sx /= (float)rect.Width;
+            sx *= (float)w;
+            sx /= (rect.Width / 128f);
+
+            sy /= (float)rect.Height;
+            sy *= (float)h;
+            sy /= (rect.Height / 128f);
+
+            X = sx;
+            Y = sy;
         }
 
         public void Update(GameTime gameTime)

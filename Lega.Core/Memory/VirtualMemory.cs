@@ -254,5 +254,25 @@
             _data[address + 2] = (byte)(value >> 08);
             _data[address + 3] = (byte)(value >> 00);
         }
-    }
+
+		public void Clear()
+		{
+			Span<byte> span = _data;
+			span.Fill(0x00);
+		}
+
+		public void Clear(int address)
+		{
+            Span<byte> span = _data;
+			span = span.Slice(address);
+            span.Fill(0x00);
+        }
+
+		public void Clear(int address, int bytes)
+		{
+            Span<byte> span = _data;
+            span = span.Slice(address, bytes);
+            span.Fill(0x00);
+        }
+	}
 }

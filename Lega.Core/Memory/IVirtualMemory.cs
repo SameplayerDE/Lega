@@ -34,5 +34,9 @@ namespace Lega.Core.Memory
 
         public bool Contains(int address);
         public bool Contains(int address, int bytes);
+
+        public void Clear();
+        public void Clear(int address);
+        public void Clear(int address, int bytes);
     }
 }

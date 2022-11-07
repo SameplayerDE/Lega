@@ -210,5 +210,20 @@ namespace Lega.Monogame.Shared.Hoopfe
             //_keyboard.Update(gameTime);
             _mouse.Update(gameTime);
         }
+
+        public void Clear()
+        {
+            _systemMemory.Clear();
+        }
+
+        public void Clear(int address)
+        {
+            _systemMemory.Clear(address);
+        }
+
+        public void Clear(int address, int bytes)
+        {
+            _systemMemory.Clear(address, bytes);
+        }
     }
 }

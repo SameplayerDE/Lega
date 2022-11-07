@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +48,19 @@ namespace Lega.Monogame.Shared.Hoopfe.Core
                 Util.FromHex("fafbf6"),
             },
         };
+
+        public static void SetPixel(this Texture2D texture, int x, int y, byte value)
+        {
+            if (x < 0 || x >= texture.Width || y < 0 || y >= texture.Height)
+            {
+                return;
+            }
+            texture.SetData(0, 
+            new Rectangle(x, y, 1, 1),
+            new Color[] { GetColor(0, value) },
+            0,
+            1);
+        }
 
         public static Color[] FromBuffer(ReadOnlySpan<byte> data, int pal = 0)
         {
