@@ -1,14 +1,26 @@
 ﻿using Lega.Core.Memory;
 using Lega.Core.Monogame;
 using Lega.Core.Monogame.Input;
+using Lega.Monogame.Shared.Hoopfe.Core;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Net;
+using System.Windows.Input;
 
 namespace Lega.Monogame.Shared.Hoopfe
 {
+    public struct MemoryCommand
+    {
+        public int Index;
+        public byte Value;
+    }
+
     public sealed class VirtualSystem : IVirtualMemory, IUpdateable
     {
+
+        private Queue<MemoryCommand> _commands;
 
         private VirtualMemory _systemMemory;
         private VirtualMemoryRegion _systemData;
@@ -21,9 +33,13 @@ namespace Lega.Monogame.Shared.Hoopfe
 
         public int Bytes => _bytes;
         public event EventHandler MemoryChange;
+        public event EventHandler DisplayMemoryChange;
+        public event EventHandler SystemMemoryChange;
 
         private VirtualSystem()
         {
+            _commands = new Queue<MemoryCommand>();
+
             _systemMemory = new VirtualMemory(_bytes);
             _systemData = new VirtualMemoryRegion(_systemMemory, 0x00, 1_024);
             _systemDisplayData = new VirtualMemoryRegion(_systemMemory, 0x400, 4_096);
@@ -64,50 +80,63 @@ namespace Lega.Monogame.Shared.Hoopfe
 
         public void Poke(int address, byte value)
         {
+            /*
+            _commands.Enqueue(new MemoryCommand()
+            {
+                Index = address,
+                Value = value
+            });
+            */
             _systemMemory.Poke(address, value);
-            MemoryChange?.Invoke(null, EventArgs.Empty);
+            
         }
 
         public void Poke(int address, params byte[] value)
         {
+            /*
+            int offset = 0;
+            while (offset < value.Length)
+            {
+                Poke(address + offset, value[offset]);
+                offset++;
+            }
+            */
             _systemMemory.Poke(address, value);
-            MemoryChange?.Invoke(null, EventArgs.Empty);
         }
 
         public void Poke(int address, ReadOnlySpan<byte> value)
         {
+            /*
+            int offset = 0;
+            while (offset < value.Length)
+            {
+                Poke(address + offset, value[offset]);
+                offset++;
+            }
+            */
             _systemMemory.Poke(address, value);
-            MemoryChange?.Invoke(null, EventArgs.Empty);
         }
 
         public void Poke2(int address, ushort value)
         {
             /*
-            byte upper = (byte)(value >> 8);
-            byte lower = (byte)(value & 0x00FF);
-
-            _systemMemory.Poke(address + 0, upper);
-            _systemMemory.Poke(address + 1, lower);
+            Poke(address + 0, (byte)(value >> 8));
+            Poke(address + 1, (byte)(value & 0x00FF));
             */
-
             _systemMemory.Poke2(address, value);
-            MemoryChange?.Invoke(null, EventArgs.Empty);
         }
 
         public void Poke4(int address, uint value)
         {
             /*
-            ushort upper = (ushort)(value >> 16);
-            ushort lower = (ushort)(value & 0x0000FFFF);
-
-            _systemMemory.Poke(address + 0, (byte)(upper >> 8));
-            _systemMemory.Poke(address + 1, (byte)(upper & 0x00FF));
-            _systemMemory.Poke(address + 2, (byte)(lower >> 8));
-            _systemMemory.Poke(address + 3, (byte)(lower & 0x00FF));
+            Poke(address + 0, (byte)(value >> 24));
+            Poke(address + 1, (byte)(value >> 16));
+            Poke(address + 2, (byte)(value >> 08));
+            Poke(address + 3, (byte)(value >> 00));
             */
 
             _systemMemory.Poke4(address, value);
-            MemoryChange?.Invoke(null, EventArgs.Empty);
+            //MemoryChange?.Invoke(null, EventArgs.Empty);
         }
 
         public byte Peek(int address)
@@ -179,6 +208,7 @@ namespace Lega.Monogame.Shared.Hoopfe
             ba = (byte)(ba << 2);
 
             Poke(_systemDisplayData.Offset + index, (byte)(aa + ab + ba + bb));
+            //_commands.Enqueue(new MemoryCommand());
         }
 
         public void DrawSprite(int x, int y, int id)
@@ -224,6 +254,42 @@ namespace Lega.Monogame.Shared.Hoopfe
         public void Clear(int address, int bytes)
         {
             _systemMemory.Clear(address, bytes);
+        }
+
+        public void Apply()
+        {
+            var queued = _commands.Count > 0;
+            var displayQueued = false;
+            while (_commands.Count > 0)
+            {
+                var command = _commands.Dequeue();
+                if (command.Index > 0x0400 && command.Index < 0x13FF)
+                {
+                    displayQueued = true;
+                }
+                //_systemMemory.Poke(command.Index, command.Value);
+                //Future Stuff Maybe IDK
+            }
+            if (queued)
+            {
+                OnMemoryChange(EventArgs.Empty);
+            }
+            if (displayQueued)
+            {
+                OnDisplayMemoryChange(EventArgs.Empty);
+            }
+        }
+
+        protected void OnMemoryChange(EventArgs args)
+        {
+            var handler = MemoryChange;
+            handler?.Invoke(this, args);
+        }
+
+        protected void OnDisplayMemoryChange(EventArgs args)
+        {
+            var handler = DisplayMemoryChange;
+            handler?.Invoke(this, args);
         }
     }
 }

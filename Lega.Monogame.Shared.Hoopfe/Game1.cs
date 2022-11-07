@@ -47,7 +47,7 @@ namespace Lega.Monogame.Shared.Hoopfe
 			_displayThread.Start();
 
 
-			VirtualSystem.Instance.MemoryChange += OnMemoryChange;
+			VirtualSystem.Instance.DisplayMemoryChange += OnDisplayMemoryChange;
 		}
 
 		private void UpdateDisplay(object obj)
@@ -65,15 +65,17 @@ namespace Lega.Monogame.Shared.Hoopfe
 			}*/
 		}
 
-		private void OnMemoryChange(object sender, EventArgs eventArgs)
+		private void OnDisplayMemoryChange(object sender, EventArgs eventArgs)
 		{
-			Task.Run(() =>
+            Task.Run(() =>
 			{
-                _output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096)));
-            });
-		}
+			//_output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096)));
 
-		protected override void Initialize()
+            });
+
+        }
+
+        protected override void Initialize()
 		{
 			_random = new Random();
 
@@ -85,10 +87,11 @@ namespace Lega.Monogame.Shared.Hoopfe
 			_graphics.HardwareModeSwitch = false;
 			_graphics.PreferMultiSampling = false;
 			_graphics.IsFullScreen = false;
+			_graphics.SynchronizeWithVerticalRetrace = false;
 			_graphics.ApplyChanges();
 
 			Window.ClientSizeChanged += OnResize;
-			IsFixedTimeStep = true;
+			IsFixedTimeStep = false;
 			MaxElapsedTime = TimeSpan.FromSeconds(1);
 			TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
 			Window.AllowUserResizing = true;
@@ -150,13 +153,20 @@ namespace Lega.Monogame.Shared.Hoopfe
 			}
 
 
-			if (SystemMouse.StateChange)
+            VirtualSystem.Instance.Clear(0x400, 4096);
+            VirtualSystem.Instance.DrawSprite((int)VirtualSystem.Instance._mouse.X, (int)VirtualSystem.Instance._mouse.Y, 00);
+
+
+            /*if (SystemMouse.StateChange)
 			{
-				VirtualSystem.Instance.Clear(0x400, 4096);
-				VirtualSystem.Instance.DrawSprite((int)VirtualSystem.Instance._mouse.X, (int)VirtualSystem.Instance._mouse.Y, 00);
-			}
-			
-			_debugUpdate.Stop();
+			}*/
+
+            //VirtualSystem.Instance.Apply();
+
+            _output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096)));
+
+
+            _debugUpdate.Stop();
 			//Console.WriteLine(_debugUpdate.ElapsedTicks);
 
 			base.Update(gameTime);
@@ -197,7 +207,8 @@ namespace Lega.Monogame.Shared.Hoopfe
 			*/
 
 			_spriteBatch.Draw(_target, _destination, Color.White);
-			_spriteBatch.DrawString(_font, $"{_debugUpdate.Elapsed.TotalMilliseconds}", Vector2.Zero, Color.Yellow);
+			//_spriteBatch.DrawString(_font, $"{_debugUpdate.Elapsed.TotalMilliseconds}", Vector2.Zero, Color.Yellow);
+			_spriteBatch.DrawString(_font, "" + 1 / gameTime.ElapsedGameTime.TotalSeconds, Vector2.Zero, Color.Yellow);
 			_spriteBatch.End();
 
 			base.Draw(gameTime);

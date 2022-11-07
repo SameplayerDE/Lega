@@ -38,9 +38,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Pr
 		shader.hlsl = shader.hlsl
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.LoopTime", "Lega.LoopTime\Lega.LoopTime.csproj", "{2312CE21-D5FC-4082-A384-AEC13C8CCC6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lega.LoopTime", "Lega.LoopTime\Lega.LoopTime.csproj", "{2312CE21-D5FC-4082-A384-AEC13C8CCC6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lega.SFML.Demo", "Lega.SFML.Demo\Lega.SFML.Demo.csproj", "{63D785A9-D54E-4C1C-A285-FC54FDDDA085}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lega.SFML.Demo", "Lega.SFML.Demo\Lega.SFML.Demo.csproj", "{63D785A9-D54E-4C1C-A285-FC54FDDDA085}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
