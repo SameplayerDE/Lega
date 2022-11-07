@@ -9,6 +9,8 @@ using Lega.Core.Monogame.Input;
 using System.Diagnostics;
 using System.Threading;
 using System.Security.AccessControl;
+using NAudio.Wave.SampleProviders;
+using NAudio.Wave;
 
 namespace Lega.Monogame.Shared.Hoopfe
 {
@@ -18,8 +20,6 @@ namespace Lega.Monogame.Shared.Hoopfe
 		private SpriteBatch _spriteBatch;
 		private SpriteFont _font;
 
-		private Random _random;
-		private Stopwatch _debugUpdate;
 		private Texture2D _output;
 		private RenderTarget2D _target;
 		private Rectangle _destination;
@@ -33,52 +33,16 @@ namespace Lega.Monogame.Shared.Hoopfe
 			}
 		}
 
-		private Thread _displayThread;
-
 		public Game1()
 		{
-			_debugUpdate = new Stopwatch();
 			_graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 			IsMouseVisible = false;
-
-			_displayThread = new Thread(UpdateDisplay);
-			_displayThread.IsBackground = true;
-			_displayThread.Start();
-
-
-			VirtualSystem.Instance.DisplayMemoryChange += OnDisplayMemoryChange;
 		}
 
-		private void UpdateDisplay(object obj)
-		{
-			/*while (_displayThread.IsAlive)
-			{
-				for (int y = 0; y < 128; y++)
-				{
-					for (int x = 0; x < 128; x++)
-					{
-						_output?.SetPixel(x, y, 0b11);
-					}
-				}
-				//_output?.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096), 3));
-			}*/
-		}
-
-		private void OnDisplayMemoryChange(object sender, EventArgs eventArgs)
-		{
-			Task.Run(() =>
-			{
-			//_output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096)));
-
-			});
-
-		}
 
 		protected override void Initialize()
 		{
-			_random = new Random();
-
 			_graphics.PreferredBackBufferWidth = 720;
 			_graphics.PreferredBackBufferHeight = 720;
 			_graphics.PreferredBackBufferFormat = SurfaceFormat.Color;
@@ -91,7 +55,7 @@ namespace Lega.Monogame.Shared.Hoopfe
 			_graphics.ApplyChanges();
 
 			Window.ClientSizeChanged += OnResize;
-			IsFixedTimeStep = false;
+			IsFixedTimeStep = true;
 			MaxElapsedTime = TimeSpan.FromSeconds(1);
 			TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
 			Window.AllowUserResizing = true;
@@ -113,7 +77,6 @@ namespace Lega.Monogame.Shared.Hoopfe
 
 			_output = new Texture2D(GraphicsDevice, 128, 128);
 			_target = new RenderTarget2D(GraphicsDevice, 128, 128);
-
 
 			/*
 			VirtualSystem.Instance.Poke4(0x400, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
@@ -137,7 +100,6 @@ namespace Lega.Monogame.Shared.Hoopfe
 
 		protected override void Update(GameTime gameTime)
 		{
-			_debugUpdate.Restart();
 			SystemKeyboard.Update(gameTime);
 			SystemMouse.Update(gameTime);
 			VirtualSystem.Instance.Update(gameTime);
@@ -152,29 +114,17 @@ namespace Lega.Monogame.Shared.Hoopfe
 				}
 			}
 
-
 			VirtualSystem.Instance.Clear(0x400, 4096);
 			VirtualSystem.Instance.DrawSprite((int)VirtualSystem.Instance._mouse.X, (int)VirtualSystem.Instance._mouse.Y, 00);
-
-
-			/*if (SystemMouse.StateChange)
-			{
-			}*/
-
-			//VirtualSystem.Instance.Apply();
-
 			_output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096)));
-
-
-			_debugUpdate.Stop();
-			//Console.WriteLine(_debugUpdate.ElapsedTicks);
 
 			base.Update(gameTime);
 		}
 
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.SetRenderTarget(_target);
+
+            GraphicsDevice.SetRenderTarget(_target);
 
 			_spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 			_spriteBatch.Draw(_output, Vector2.Zero, Color.White);
@@ -207,7 +157,6 @@ namespace Lega.Monogame.Shared.Hoopfe
 			*/
 
 			_spriteBatch.Draw(_target, _destination, Color.White);
-			//_spriteBatch.DrawString(_font, $"{_debugUpdate.Elapsed.TotalMilliseconds}", Vector2.Zero, Color.Yellow);
 			_spriteBatch.DrawString(_font, "" + 1 / gameTime.ElapsedGameTime.TotalSeconds, Vector2.Zero, Color.Yellow);
 			_spriteBatch.End();
 
