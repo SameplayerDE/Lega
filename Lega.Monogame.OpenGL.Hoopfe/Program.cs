@@ -3,34 +3,16 @@ using NAudio.Wave;
 using System.Threading;
 using System;
 using System.Threading.Tasks;
+using Lega.Core.Monogame.Audio;
 
-Task.Run(() =>
-{
-    var beep = new SignalGenerator()
-    {
-        Gain = 0.1,
-        Frequency = 100,
-        Type = SignalGeneratorType.SawTooth
-    }.Take(TimeSpan.FromSeconds(5));
+VirtualAudioChannel sqr = new VirtualAudioChannel(SignalGeneratorType.Square);
+VirtualAudioChannel saw = new VirtualAudioChannel(SignalGeneratorType.SawTooth);
+VirtualAudioChannel tri = new VirtualAudioChannel(SignalGeneratorType.Triangle);
 
-    var boop = new SignalGenerator()
-    {
-        Gain = 0.1,
-        Frequency = 100,
-        Type = SignalGeneratorType.SawTooth
-    }.Take(TimeSpan.FromSeconds(5));
-
-    using (var wo = new WaveOutEvent())
-    {
-        wo.Init(sine20Seconds);
-        wo.Play();
-        while (wo.PlaybackState == PlaybackState.Playing)
-        {
-            Thread.Sleep(500);
-        }
-    }
-});
-
+sqr.Play(0.1f, 100, 100);
+tri.Play(0.1f, 300, 100);
+saw.Play(0.1f, 100, 100);
+sqr.Play(0.1f, 100, 100);
 
 using var game = new Lega.Monogame.Shared.Hoopfe.Game1();
 game.Run();
