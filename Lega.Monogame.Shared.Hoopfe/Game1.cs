@@ -67,15 +67,15 @@ namespace Lega.Monogame.Shared.Hoopfe
 
 		private void OnDisplayMemoryChange(object sender, EventArgs eventArgs)
 		{
-            Task.Run(() =>
+			Task.Run(() =>
 			{
 			//_output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096)));
 
-            });
+			});
 
-        }
+		}
 
-        protected override void Initialize()
+		protected override void Initialize()
 		{
 			_random = new Random();
 
@@ -153,20 +153,20 @@ namespace Lega.Monogame.Shared.Hoopfe
 			}
 
 
-            VirtualSystem.Instance.Clear(0x400, 4096);
-            VirtualSystem.Instance.DrawSprite((int)VirtualSystem.Instance._mouse.X, (int)VirtualSystem.Instance._mouse.Y, 00);
+			VirtualSystem.Instance.Clear(0x400, 4096);
+			VirtualSystem.Instance.DrawSprite((int)VirtualSystem.Instance._mouse.X, (int)VirtualSystem.Instance._mouse.Y, 00);
 
 
-            /*if (SystemMouse.StateChange)
+			/*if (SystemMouse.StateChange)
 			{
 			}*/
 
-            //VirtualSystem.Instance.Apply();
+			//VirtualSystem.Instance.Apply();
 
-            _output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096)));
+			_output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096)));
 
 
-            _debugUpdate.Stop();
+			_debugUpdate.Stop();
 			//Console.WriteLine(_debugUpdate.ElapsedTicks);
 
 			base.Update(gameTime);
