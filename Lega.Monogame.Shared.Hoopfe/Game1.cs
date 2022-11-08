@@ -114,6 +114,16 @@ namespace Lega.Monogame.Shared.Hoopfe
 				}
 			}
 
+			if (!VirtualSystem.Instance.AudioDriver.IsPlaying)
+			{
+				VirtualSystem.Instance.AudioDriver.Play();
+			}
+
+			VirtualSystem.Instance.AudioDriver[0].Gain = 0.1;
+			VirtualSystem.Instance.AudioDriver[0].Frequency = 500 + Math.Sin(gameTime.TotalGameTime.TotalMilliseconds) * 250;
+
+			VirtualSystem.Instance.AudioDriver.Pause();
+
 			VirtualSystem.Instance.Clear(0x400, 4096);
 			VirtualSystem.Instance.DrawSprite((int)VirtualSystem.Instance._mouse.X, (int)VirtualSystem.Instance._mouse.Y, 00);
 			_output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096)));

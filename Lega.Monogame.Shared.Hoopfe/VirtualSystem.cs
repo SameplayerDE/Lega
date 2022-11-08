@@ -1,5 +1,6 @@
 ﻿using Lega.Core.Memory;
 using Lega.Core.Monogame;
+using Lega.Core.Monogame.Audio;
 using Lega.Core.Monogame.Input;
 using Lega.Monogame.Shared.Hoopfe.Core;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
@@ -26,6 +27,10 @@ namespace Lega.Monogame.Shared.Hoopfe
 		private VirtualMemoryRegion _systemData;
 		private VirtualMemoryRegion _systemDisplayData;
 
+		private VirtualAudioDriver _audioDriver;
+		public VirtualAudioDriver AudioDriver => _audioDriver;
+		private VirtualAudioChannel _sinChannel;
+
 		//private VirtualKeyboard _keyboard;
 		public VirtualMouse _mouse;
 
@@ -44,6 +49,8 @@ namespace Lega.Monogame.Shared.Hoopfe
 			_systemData = new VirtualMemoryRegion(_systemMemory, 0x00, 1_024);
 			_systemDisplayData = new VirtualMemoryRegion(_systemMemory, 0x400, 4_096);
 
+			_sinChannel = new VirtualAudioChannel(NAudio.Wave.SampleProviders.SignalGeneratorType.Sin);
+			_audioDriver = new VirtualAudioDriver(_sinChannel);
 			//_keyboard = new VirtualKeyboard();
 			_mouse = new VirtualMouse();
 
@@ -291,5 +298,6 @@ namespace Lega.Monogame.Shared.Hoopfe
 			var handler = DisplayMemoryChange;
 			handler?.Invoke(this, args);
 		}
+
 	}
 }

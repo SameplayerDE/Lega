@@ -14,6 +14,7 @@ namespace Lega.Core.Monogame.Audio
         public MixingSampleProvider Provider;
         private WaveOutEvent _outputMaster;
         private VirtualAudioChannel[] _channels;
+        public bool IsPlaying => _outputMaster.PlaybackState == PlaybackState.Playing;
 
         public VirtualAudioChannel this[int key]
         {
