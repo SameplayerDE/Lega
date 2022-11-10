@@ -33,6 +33,45 @@ namespace Lega.Monogame.Shared.Hoopfe
 
 		//private VirtualKeyboard _keyboard;
 		public VirtualMouse _mouse;
+		public Dictionary<char, int> _fontMapping = new Dictionary<char, int>()
+		{
+			{ 'a', 01 },
+			{ 'b', 02 },
+			{ 'c', 03 },
+			{ 'd', 04 },
+			{ 'e', 05 },
+			{ 'f', 06 },
+			{ 'g', 07 },
+			{ 'h', 08 },
+			{ 'i', 09 },
+			{ 'j', 10 },
+			{ 'k', 11 },
+			{ 'l', 12 },
+			{ 'm', 13 },
+			{ 'n', 14 },
+			{ 'o', 15 },
+			{ 'p', 16 },
+			{ 'q', 17 },
+			{ 'r', 18 },
+			{ 's', 19 },
+			{ 't', 20 },
+			{ 'u', 21 },
+			{ 'v', 22 },
+			{ 'w', 23 },
+			{ 'x', 24 },
+			{ 'y', 25 },
+			{ 'z', 26 },
+			{ '0', 27 },
+			{ '1', 28 },
+			{ '2', 29 },
+			{ '3', 30 },
+			{ '4', 31 },
+			{ '5', 32 },
+			{ '6', 33 },
+			{ '7', 34 },
+			{ '8', 35 },
+			{ '9', 36 },
+		};
 
 		private const int _bytes = 8_192;
 
@@ -61,7 +100,16 @@ namespace Lega.Monogame.Shared.Hoopfe
 				i++;
 			}
 
-			_systemData.Poke2(0x0000, 0b_10_10_00_00_00_00_00_00);
+            _systemData.Poke2(0x0000, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0000, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0000, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0000, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0000, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0000, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0000, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0000, 0b_00_00_00_00_00_00_00_00);
+
+            _systemData.Poke2(0x0000, 0b_10_10_00_00_00_00_00_00);
 			_systemData.Poke2(0x0002, 0b_10_11_10_00_00_00_00_00);
 			_systemData.Poke2(0x0004, 0b_10_11_11_10_00_00_00_00);
 			_systemData.Poke2(0x0006, 0b_10_11_11_11_10_00_00_00);
@@ -69,7 +117,110 @@ namespace Lega.Monogame.Shared.Hoopfe
 			_systemData.Poke2(0x000A, 0b_10_11_11_11_11_11_10_00);
 			_systemData.Poke2(0x000C, 0b_10_11_11_11_10_10_00_00);
 			_systemData.Poke2(0x000E, 0b_00_10_10_11_11_10_00_00);
-		}
+
+			//Alphabet
+
+			//A
+            _systemData.Poke2(0x0010, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0012, 0b_00_00_11_11_11_11_00_00);
+            _systemData.Poke2(0x0014, 0b_00_11_00_00_11_11_11_00);
+            _systemData.Poke2(0x0016, 0b_00_11_00_00_11_11_11_00);
+            _systemData.Poke2(0x0018, 0b_00_11_11_11_11_11_11_00);
+            _systemData.Poke2(0x001A, 0b_00_11_00_00_11_11_11_00);
+            _systemData.Poke2(0x001C, 0b_00_11_00_00_11_11_11_00);
+            _systemData.Poke2(0x001E, 0b_00_00_00_00_00_00_00_00);
+
+            //B
+            _systemData.Poke2(0x0020, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0022, 0b_00_11_11_11_11_11_00_00);
+            _systemData.Poke2(0x0024, 0b_00_11_11_00_00_11_11_00);
+            _systemData.Poke2(0x0026, 0b_00_11_11_11_11_11_00_00);
+            _systemData.Poke2(0x0028, 0b_00_11_11_00_00_11_11_00);
+            _systemData.Poke2(0x002A, 0b_00_11_11_00_00_11_11_00);
+            _systemData.Poke2(0x002C, 0b_00_11_11_11_11_11_00_00);
+            _systemData.Poke2(0x002E, 0b_00_00_00_00_00_00_00_00);
+
+            //C
+            _systemData.Poke2(0x0030, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0032, 0b_00_00_11_11_11_11_00_00);
+            _systemData.Poke2(0x0034, 0b_00_11_11_00_00_11_11_00);
+            _systemData.Poke2(0x0036, 0b_00_11_11_00_00_00_00_00);
+            _systemData.Poke2(0x0038, 0b_00_11_11_00_00_00_00_00);
+            _systemData.Poke2(0x003A, 0b_00_11_11_00_00_11_11_00);
+            _systemData.Poke2(0x003C, 0b_00_00_11_11_11_11_00_00);
+            _systemData.Poke2(0x003E, 0b_00_00_00_00_00_00_00_00);
+
+            //D
+            _systemData.Poke2(0x0040, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0042, 0b_00_11_11_11_11_11_00_00);
+            _systemData.Poke2(0x0044, 0b_00_11_00_00_11_11_11_00);
+            _systemData.Poke2(0x0046, 0b_00_11_00_00_11_11_11_00);
+            _systemData.Poke2(0x0048, 0b_00_11_00_00_11_11_11_00);
+            _systemData.Poke2(0x004A, 0b_00_11_00_00_11_11_11_00);
+            _systemData.Poke2(0x004C, 0b_00_11_11_11_11_11_00_00);
+            _systemData.Poke2(0x004E, 0b_00_00_00_00_00_00_00_00);
+
+            //E
+            _systemData.Poke2(0x0050, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0052, 0b_00_11_11_11_11_11_11_00);
+            _systemData.Poke2(0x0054, 0b_00_11_00_00_00_00_00_00);
+            _systemData.Poke2(0x0056, 0b_00_11_11_11_11_11_00_00);
+            _systemData.Poke2(0x0058, 0b_00_11_00_00_00_00_00_00);
+            _systemData.Poke2(0x005A, 0b_00_11_00_00_00_00_00_00);
+            _systemData.Poke2(0x005C, 0b_00_11_11_11_11_11_11_00);
+            _systemData.Poke2(0x005E, 0b_00_00_00_00_00_00_00_00);
+
+            //F
+            _systemData.Poke2(0x0060, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0062, 0b_00_11_11_11_11_11_11_00);
+            _systemData.Poke2(0x0064, 0b_00_11_00_00_00_00_00_00);
+            _systemData.Poke2(0x0066, 0b_00_11_00_00_00_00_00_00);
+            _systemData.Poke2(0x0068, 0b_00_11_11_11_11_11_00_00);
+            _systemData.Poke2(0x006A, 0b_00_11_00_00_00_00_00_00);
+            _systemData.Poke2(0x006C, 0b_00_11_00_00_00_00_00_00);
+            _systemData.Poke2(0x006E, 0b_00_00_00_00_00_00_00_00);
+
+            //G
+            _systemData.Poke2(0x0070, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0072, 0b_00_00_11_11_11_11_00_00);
+            _systemData.Poke2(0x0074, 0b_00_11_11_00_00_11_11_00);
+            _systemData.Poke2(0x0076, 0b_00_11_11_00_00_00_00_00);
+            _systemData.Poke2(0x0078, 0b_00_11_11_00_11_11_11_00);
+            _systemData.Poke2(0x007A, 0b_00_11_11_00_00_11_11_00);
+            _systemData.Poke2(0x007C, 0b_00_00_11_11_11_11_00_00);
+            _systemData.Poke2(0x007E, 0b_00_00_00_00_00_00_00_00);
+
+            //H
+            _systemData.Poke2(0x0080, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0082, 0b_00_11_00_00_00_11_11_00);
+            _systemData.Poke2(0x0084, 0b_00_11_00_00_00_11_11_00);
+            _systemData.Poke2(0x0086, 0b_00_11_11_11_11_11_11_00);
+            _systemData.Poke2(0x0088, 0b_00_11_00_00_00_11_11_00);
+            _systemData.Poke2(0x008A, 0b_00_11_00_00_00_11_11_00);
+            _systemData.Poke2(0x008C, 0b_00_11_00_00_00_11_11_00);
+            _systemData.Poke2(0x008E, 0b_00_00_00_00_00_00_00_00);
+
+            //I
+            _systemData.Poke2(0x0090, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x0092, 0b_00_00_11_11_11_11_00_00);
+            _systemData.Poke2(0x0094, 0b_00_00_00_11_11_00_00_00);
+            _systemData.Poke2(0x0096, 0b_00_00_00_11_11_00_00_00);
+            _systemData.Poke2(0x0098, 0b_00_00_00_11_11_00_00_00);
+            _systemData.Poke2(0x009A, 0b_00_00_00_11_11_00_00_00);
+            _systemData.Poke2(0x009C, 0b_00_00_11_11_11_11_00_00);
+            _systemData.Poke2(0x009E, 0b_00_00_00_00_00_00_00_00);
+
+            //J
+            _systemData.Poke2(0x00A0, 0b_00_00_00_00_00_00_00_00);
+            _systemData.Poke2(0x00A2, 0b_00_00_11_11_11_11_00_00);
+            _systemData.Poke2(0x00A4, 0b_00_00_00_11_11_00_00_00);
+            _systemData.Poke2(0x00A6, 0b_00_00_00_11_11_00_00_00);
+            _systemData.Poke2(0x00A8, 0b_00_00_00_11_11_00_00_00);
+            _systemData.Poke2(0x00AA, 0b_00_00_00_11_11_00_00_00);
+            _systemData.Poke2(0x00AC, 0b_00_00_11_11_11_11_00_00);
+            _systemData.Poke2(0x00AE, 0b_00_00_00_00_00_00_00_00);
+
+        }
 
 		public static VirtualSystem Instance { get { return Nested.instance; } }
 
@@ -242,7 +393,26 @@ namespace Lega.Monogame.Shared.Hoopfe
 			}
 		}
 
-		public void Update(Microsoft.Xna.Framework.GameTime gameTime)
+
+        public void DrawString(int x, int y, string value)
+        {
+			value = value.ToLower();
+			int offset = 0;
+			while (offset < value.Length)
+			{
+				var c = value[offset];
+				if (c == ' ')
+				{
+                    offset++;
+					continue;
+                }
+				var code = _fontMapping[c];
+				DrawSprite(x + offset * 8, y, code);
+                offset++;
+            }
+        }
+
+        public void Update(Microsoft.Xna.Framework.GameTime gameTime)
 		{
 			//_keyboard.Update(gameTime);
 			_mouse.Update(gameTime);

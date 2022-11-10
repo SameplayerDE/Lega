@@ -78,7 +78,8 @@ namespace Lega.Monogame.Shared.Hoopfe
 			_output = new Texture2D(GraphicsDevice, 128, 128);
 			_target = new RenderTarget2D(GraphicsDevice, 128, 128);
 
-			/*
+            
+            /*
 			VirtualSystem.Instance.Poke4(0x400, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
 			VirtualSystem.Instance.Poke4(0x420, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
 			VirtualSystem.Instance.Poke4(0x440, 0b00_00_00_11_11_11_00_00_00_00_11_11_11_00_00_00);
@@ -96,36 +97,33 @@ namespace Lega.Monogame.Shared.Hoopfe
 			VirtualSystem.Instance.Poke4(0x5C0, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
 			VirtualSystem.Instance.Poke4(0x5E0, 0b00_00_00_00_00_00_00_00_00_00_00_00_00_00_00_00);
 			*/
-		}
+        }
 
 		protected override void Update(GameTime gameTime)
 		{
 			SystemKeyboard.Update(gameTime);
 			SystemMouse.Update(gameTime);
-			VirtualSystem.Instance.Update(gameTime);
+            VirtualSystem.Instance.Update(gameTime);
 
-			VirtualSystem.Instance._mouse.Map(_destination, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-
-			if (SystemKeyboard.IsKeyDown(Keys.LeftAlt))
+            VirtualSystem.Instance._mouse.Map(_destination, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            
+            if (SystemKeyboard.IsKeyDown(Keys.LeftAlt))
 			{
-				if (SystemKeyboard.IsKeyDownOnce(Keys.Enter))
+                if (SystemKeyboard.IsKeyDownOnce(Keys.Enter))
 				{
 					IsFullScreen = !IsFullScreen;
 				}
 			}
 
-			if (!VirtualSystem.Instance.AudioDriver.IsPlaying)
-			{
-				VirtualSystem.Instance.AudioDriver.Play();
-			}
+            //Console.WriteLine(VirtualSystem.Instance.AudioDriver[0].Frequency);
 
-			VirtualSystem.Instance.AudioDriver[0].Gain = 0.1;
-			VirtualSystem.Instance.AudioDriver[0].Frequency = 500 + Math.Sin(gameTime.TotalGameTime.TotalMilliseconds) * 250;
+            //VirtualSystem.Instance.AudioDriver.Pause();
 
-			VirtualSystem.Instance.AudioDriver.Pause();
+            VirtualSystem.Instance.Clear(0x400, 4096);
 
-			VirtualSystem.Instance.Clear(0x400, 4096);
-			VirtualSystem.Instance.DrawSprite((int)VirtualSystem.Instance._mouse.X, (int)VirtualSystem.Instance._mouse.Y, 00);
+			//VirtualSystem.Instance.DrawSprite((int)VirtualSystem.Instance._mouse.X, (int)VirtualSystem.Instance._mouse.Y, 0);
+			VirtualSystem.Instance.DrawString(0, 0, "h  ai");
+			
 			_output.SetData(Util.FromBuffer(VirtualSystem.Instance.Peek(0x400, 4_096)));
 
 			base.Update(gameTime);
